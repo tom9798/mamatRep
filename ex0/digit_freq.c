@@ -17,9 +17,9 @@ int main() {
         }
     }
     //printf("Frequency of digits: ");
-    //for (int i = 0; i < 10; i++) {
-    //    printf("%d ", freq[i]);
-    //}
+    for (int i = 0; i < 10; i++) {
+        printf("%d ", freq[i]);
+    }
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
     return 0;
 }
