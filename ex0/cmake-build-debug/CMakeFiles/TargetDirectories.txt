@@ -1,0 +1,2 @@
+C:/Users/soust/OneDrive - Technion/mamat/ex0/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/soust/OneDrive - Technion/mamat/ex0/cmake-build-debug/CMakeFiles/rebuild_cache.dir
