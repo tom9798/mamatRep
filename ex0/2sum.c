@@ -20,6 +20,7 @@ int main() {
 }
 
 void twoSum(int nums[], int nums_size, int target) {
+    //no sort option
 //    for (int i = 0; i < nums_size; i++) {
 //        for (int j = i + 1; j < nums_size; j++) {
 //            if (nums[i] + nums[j] == target) {
@@ -28,23 +29,27 @@ void twoSum(int nums[], int nums_size, int target) {
 //            }
 //        }
 //    }
-    //preform a sort on the array
-    int temp;
+
+    //sort the array
     for (int i = 0; i < nums_size; i++) {
         for (int j = i + 1; j < nums_size; j++) {
             if (nums[i] > nums[j]) {
-                temp = nums[i];
+                int temp = nums[i];
                 nums[i] = nums[j];
                 nums[j] = temp;
             }
         }
     }
-    //find the two numbers that add up to the target
+
+    //find the two numbers that add up to the target in the sorted array
     int left = 0;
     int right = nums_size - 1;
+    int left_num = nums[left];
+    int right_num = nums[right];
     while (left < right) {
         if (nums[left] + nums[right] == target) {
-            printf("(%d, %d)\n", left, right);
+            left_num = 0;
+            right_num = 0;
             return;
         } else if (nums[left] + nums[right] < target) {
             left++;
@@ -52,4 +57,14 @@ void twoSum(int nums[], int nums_size, int target) {
             right--;
         }
     }
+    //find the index of the two numbers
+    for (int i = 0; i < nums_size; i++) {
+        if (nums[i] == left_num) {
+            left = i;
+        } else if (nums[i] == right_num) {
+            right = i;
+            break;
+        }
+    }
+    printf("(%d, %d)\n", left, right);
 }
