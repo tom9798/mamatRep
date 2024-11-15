@@ -50,6 +50,7 @@ void twoSum(int nums[], int nums_size, int target) {
         if (nums[left] + nums[right] == target) {
             left_num = 0;
             right_num = 0;
+            break;
         } else if (nums[left] + nums[right] < target) {
             left++;
         } else {
