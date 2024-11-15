@@ -20,5 +20,13 @@ int main() {
 }
 
 void twoSum(int nums[], int nums_size, int target) {
-	/* YOUR CODE HERE */
+    for (int i = 0; i < nums_size; i++) {
+        for (int j = i + 1; j < nums_size; j++) {
+            if (nums[i] + nums[j] == target) {
+                printf("(%d, %d)\n", i, j);
+                return;
+            }
+        }
+    }
+
 }
