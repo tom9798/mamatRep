@@ -49,5 +49,5 @@ int edit_dist(char word1[], char word2[]) {
             }
         }
     }
-    printf("%d\n", dp[len1][len2]);
+    return dp[len1][len2];
 }
