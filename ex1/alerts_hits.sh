@@ -11,16 +11,21 @@ declare -A city_counts
 
 while IFS= read -r city; do
     if [[ -n "$city" ]]; then
+	city="${city//\'/\\\'}"
         ((city_counts["$city"]++))
     fi
 done < <(echo "$json_data" | grep -oP '{[^}]*}' | grep "$today" | grep -oP '"data": *\K"[^"]*"' | tr -d '"')
 
 # Convert the associative array to an array of "count city" and sort it
-sorted_cities=($(for city in "${!city_counts[@]}"; do
+#sorted_cities=($(for city in "${!city_counts[@]}"; do
+#    echo "${city_counts[$city]} $city"
+#done | sort -nr))
+
+for city in "${!city_counts[@]}"; do
     echo "${city_counts[$city]} $city"
-done | sort -nr))
+done | sort -nr
 
 # Output the sorted array
-for entry in "${sorted_cities[@]}"; do
-    echo "$entry"
-done
+#for city in "${sorted_cities[@]}"; do
+#    echo "${sorted_cities[$city]} $city"
+#done
