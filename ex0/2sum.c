@@ -29,48 +29,4 @@ void twoSum(int nums[], int nums_size, int target) {
             }
         }
     }
-
-//    //sort the array and create a copy of the original array
-//    int temp;
-//    int origin[nums_size];
-//    for (int i = 0; i < nums_size; i++) {
-//        origin[i] = nums[i];
-//    }
-//    for (int i = 0; i < nums_size; i++) {
-//        for (int j = i + 1; j < nums_size; j++) {
-//            if (nums[i] > nums[j]) {
-//                temp = nums[i];
-//                nums[i] = nums[j];
-//                nums[j] = temp;
-//            }
-//        }
-//    }
-//
-//    //find the two numbers that add up to the target in the sorted array
-//    int left = 0;
-//    int right = nums_size - 1;
-//    int left_num = 0;
-//    int right_num = 0;
-//    while (left < right) {
-//        if (nums[left] + nums[right] == target) {
-//            left_num = nums[left];
-//            right_num = nums[right];
-//            break;
-//        } else if (nums[left] + nums[right] < target) {
-//            left++;
-//        } else {
-//            right--;
-//        }
-//    }
-//    //find the index of the two numbers
-//    for (int i = 0; i < nums_size; i++) {
-//        if (origin[i] == left_num) {
-//            left = i;
-//        }else if (origin[i] == right_num) {
-//            right = i;
-//            break;
-//        }
-//    }
-//    printf("(%d, %d)\n", left, right);
-    return;
 }
