@@ -1,8 +1,4 @@
 #!/bin/bash
-if ! command -v wget &> /dev/null; then 
-	echo "no wget"
-	exit 1
-fi
 json_data=$(wget -qO- "https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx?lang=en")
 today=$(date +"%Y-%m-%d")
 declare -A city_counts
