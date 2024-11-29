@@ -3,7 +3,9 @@
 
 int main () {
     //open the grades file, sort the grades, find the median and print it
-    FILE *grades_file = fopen("grades.in", "r");
+    char path[100];
+    scanf("%s", path);
+    FILE *grades_file = fopen(path, "r");
     if (grades_file == NULL) {
         printf("Error opening file\n");
         return 1;
@@ -21,13 +23,7 @@ int main () {
     for (int i = 0; i < num_grades; i++) {
         fscanf(grades_file, "%d", &grades[i]);
     }
-
-//    int num_grades;
-//    fscanf(grades_file, "%d", &num_grades);
-//    int *grades = (int *)malloc(num_grades * sizeof(int));
-//    for (int i = 0; i < num_grades; i++) {
-//        fscanf(grades_file, "%d", &grades[i]);
-//    }
+    
     fclose(grades_file);
     //sort the grades
     for (int i = 0; i < num_grades - 1; i++) {
@@ -39,6 +35,7 @@ int main () {
             }
         }
     }
+
     //find the median
     int median;
     if (num_grades % 2 == 0) {
@@ -46,5 +43,6 @@ int main () {
     } else {
         median = grades[num_grades / 2];
     }
+    printf("%d \n", median);
     return 0;
 }
