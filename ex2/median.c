@@ -3,17 +3,31 @@
 
 int main () {
     //open the grades file, sort the grades, find the median and print it
-    FILE *grades_file = fopen("grades.txt", "r");
+    FILE *grades_file = fopen("grades.in", "r");
     if (grades_file == NULL) {
         printf("Error opening file\n");
         return 1;
     }
-    int num_grades;
-    fscanf(grades_file, "%d", &num_grades);
+    //iterate through the file to get the number of grades
+    int num_grades = 0;
+    int grade;
+    while (fscanf(grades_file, "%d", &grade) != EOF) {
+        num_grades++;
+    }
+    //rewind the file
+    rewind(grades_file);
+    //read the grades into an array
     int *grades = (int *)malloc(num_grades * sizeof(int));
     for (int i = 0; i < num_grades; i++) {
         fscanf(grades_file, "%d", &grades[i]);
     }
+
+//    int num_grades;
+//    fscanf(grades_file, "%d", &num_grades);
+//    int *grades = (int *)malloc(num_grades * sizeof(int));
+//    for (int i = 0; i < num_grades; i++) {
+//        fscanf(grades_file, "%d", &grades[i]);
+//    }
     fclose(grades_file);
     //sort the grades
     for (int i = 0; i < num_grades - 1; i++) {
