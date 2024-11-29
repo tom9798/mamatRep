@@ -2,8 +2,10 @@
 #include <stdlib.h>
 
 int main (){
+    char gradesPath[100];
     FILE *grades;
-    grades = fopen("grades.txt", "r");
+    scanf("%s",gradesPath);
+    grades = fopen(gradesPath, "r");
     if (grades == NULL){
         printf("Error opening file\n");
         exit(1);
