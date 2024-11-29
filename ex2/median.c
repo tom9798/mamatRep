@@ -13,7 +13,13 @@ int main () {
     //iterate through the file to get the number of grades
     int num_grades = 0;
     int grade;
+    int line = 0;
     while (fscanf(grades_file, "%d", &grade) != EOF) {
+	line += 1;
+	if (grade>100 | grade <0){
+		printf("Error in line %d: invalid input %d", line, grade);
+		return 0;
+	};
         num_grades++;
     }
     //rewind the file
