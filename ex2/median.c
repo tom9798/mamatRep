@@ -1,50 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main (){
-    char gradesPath[100];
-    FILE *grades;
-    scanf("%s",gradesPath);
-    grades = fopen(gradesPath, "r");
-    if (grades == NULL){
+int main () {
+    //open the grades file, sort the grades, find the median and print it
+    FILE *grades_file = fopen("grades.txt", "r");
+    if (grades_file == NULL) {
         printf("Error opening file\n");
-        exit(1);
+        return 1;
     }
-    //perform a radix sort on the grades
-    int gradesArray[1000];
-    int gradesCount = 0;
-    while (fscanf(grades, "%d", &gradesArray[gradesCount]) != EOF){
-        gradesCount++;
+    int num_grades;
+    fscanf(grades_file, "%d", &num_grades);
+    int *grades = (int *)malloc(num_grades * sizeof(int));
+    for (int i = 0; i < num_grades; i++) {
+        fscanf(grades_file, "%d", &grades[i]);
     }
-    //perform a radix sort on the grades
-    int max = gradesArray[0];
-    for (int i = 1; i < gradesCount; i++){
-        if (gradesArray[i] > max){
-            max = gradesArray[i];
+    fclose(grades_file);
+    //sort the grades
+    for (int i = 0; i < num_grades - 1; i++) {
+        for (int j = i + 1; j < num_grades; j++) {
+            if (grades[i] > grades[j]) {
+                int temp = grades[i];
+                grades[i] = grades[j];
+                grades[j] = temp;
+            }
         }
-    }
-    int exp = 1;
-    int *output = (int *)malloc(gradesCount * sizeof(int));
-    while (max / exp > 0){
-        int count[10] = {0};
-        for (int i = 0; i < gradesCount; i++){
-            count[(gradesArray[i] / exp) % 10]++;
-        }
-        for (int i = 1; i < 10; i++){
-            count[i] += count[i - 1];
-        }
-        for (int i = gradesCount - 1; i >= 0; i--){
-            output[count[(gradesArray[i] / exp) % 10] - 1] = gradesArray[i];
-            count[(gradesArray[i] / exp) % 10]--;
-        }
-        for (int i = 0; i < gradesCount; i++){
-            gradesArray[i] = output[i];
-        }
-        exp *= 10;
     }
     //find the median
-    if (gradesCount % 2 == 0){
-        printf("%d\n", (gradesArray[gradesCount / 2 - 1] + gradesArray[gradesCount / 2]) / 2);
-    fclose(grades);
+    int median;
+    if (num_grades % 2 == 0) {
+        median = (grades[num_grades / 2 - 1] + grades[num_grades / 2]) / 2;
+    } else {
+        median = grades[num_grades / 2];
+    }
     return 0;
 }
