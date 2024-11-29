@@ -13,7 +13,6 @@ void openGradesFile(char *path) {
 
 int main() {
     char path[100];
-    printf("Enter the path to the file: ");
     scanf("%s", path);
     openGradesFile(path);
     return 0;
