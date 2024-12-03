@@ -1,7 +1,8 @@
 #!/bin/bash
-json_data=$(wget -qO- "https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx?lang=en")
-today=$(date +"%Y-%m-%d")
+today=$2
+json_data=$(awk -F, -f $1)
 declare -A city_counts
+echo $json_data
 while IFS= read -r city; do
     if [[ -n "$city" ]]; then
 	city="${city//\'/\\\'}"
