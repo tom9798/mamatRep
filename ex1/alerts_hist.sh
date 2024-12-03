@@ -1,6 +1,6 @@
 #!/bin/bash
 today=$2
-json_data=$(awk -F, -f $1)
+json_data=$(awk -F, '{print$1}' $1)
 declare -A city_counts
 echo $json_data
 while IFS= read -r city; do
