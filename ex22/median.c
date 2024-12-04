@@ -64,5 +64,13 @@ void operate(FILE *f){
     }
     printf("%d \n", median);
     free(grades);
-    return;
+
+////calculate the median, take the [n+1/2] (lower close value) element
+//    int median;
+//    if(num_grades%2==0){
+//        median = (grades[num_grades/2-1]+grades[num_grades/2])/2;
+//    }else{
+//        median = grades[num_grades/2];
+//    }
+//    return;
 }
