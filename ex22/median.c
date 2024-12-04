@@ -39,7 +39,7 @@ void operate(FILE *f){
     rewind(f);
     //read the grades into an array
     int *grades = (int *)malloc(num_grades * sizeof(int));
-    for (int i = 0; i < num_grades; i++) {
+    for (int i = 0; i < num_grades - 1; i++) {
         fscanf(f, "%d", &grades[i]);
     }
 
@@ -68,5 +68,5 @@ void operate(FILE *f){
 //    }else{
 //        median = grades[num_grades/2];
 //    }
-//    return;
+    return;
 }
