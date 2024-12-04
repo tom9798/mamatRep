@@ -1,1 +1,0 @@
-CMakeLists.txt not found in C:\Users\soust\OneDrive - Technion\mamat\ex2 Select CMakeLists.txt
