@@ -10,7 +10,7 @@ void operate(FILE *f);
 
 int main(int argc, char *argv[]) {
     FILE *f;
-    if(argc == 1 | !strcmp(argv[1], "-")){
+    if(argc == 1 || !strcmp(argv[1], "-")){
         f=stdin;
     }else{
         f=fopen(argv[1], "r");
@@ -63,5 +63,6 @@ void operate(FILE *f){
         median = grades[num_grades / 2];
     }
     printf("%d \n", median);
+    free(grades);
     return;
 }
