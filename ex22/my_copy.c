@@ -1,7 +1,3 @@
-//create a function that copies the content of a file into another file
-//the function should take two FILE pointers as arguments
-//the function should return void
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
