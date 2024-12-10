@@ -44,7 +44,7 @@ void my_grep(FILE *f, char *pattern){
 
 int main(int argc, char *argv[]) {
     FILE *f;
-    if(argc == 1 || !strcmp(argv[1], "-")){
+    if(argc == 1 || argv[1]== "-"){
         f=stdin;
     }else{
         f=fopen(argv[1], "r");
