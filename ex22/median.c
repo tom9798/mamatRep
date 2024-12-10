@@ -22,6 +22,10 @@ int main(int argc, char *argv[]) {
     operate(f);
 }
 
+int compare(const void *a, const void *b){
+    return (*(int*)a - *(int*)b);
+}
+
 void operate(FILE *f){
     //read the file
     int num_grades = 0;
@@ -30,7 +34,9 @@ void operate(FILE *f){
     while (fscanf(f, "%d", &grade) != EOF) {
         line += 1;
         if (grade>100 | grade <0){
-            printf("Error at line %d: invalid input %d\n", line, grade);
+//            printf("Error at line %d: invalid input %d\n", line, grade);
+//print the error to the stderr
+            fprintf(stderr, "Error at line %d: invalid input %d\n", line, grade);
             return;
         };
         num_grades++;
@@ -45,28 +51,22 @@ void operate(FILE *f){
 
     fclose(f);
     //sort the grades
-    for (int i = 0; i < num_grades - 1; i++) {
-        for (int j = i + 1; j < num_grades; j++) {
-            if (grades[i] > grades[j]) {
-                int temp = grades[i];
-                grades[i] = grades[j];
-                grades[j] = temp;
-            }
-        }
-    }
+//    for (int i = 0; i < num_grades - 1; i++) {
+//        for (int j = i + 1; j < num_grades; j++) {
+//            if (grades[i] > grades[j]) {
+//                int temp = grades[i];
+//                grades[i] = grades[j];
+//                grades[j] = temp;
+//            }
+//        }
+//    }
+    qsort(grades, num_grades, sizeof(int), compare);
 
     //find the median
     int median;
     median = grades[(num_grades + 1)/ 2];
     printf("%d \n", median);
     free(grades);
-
-////calculate the median, take the [n+1/2] (lower close value) element
-//    int median;
-//    if(num_grades%2==0){
-//        median = (grades[num_grades/2-1]+grades[num_grades/2])/2;
-//    }else{
-//        median = grades[num_grades/2];
-//    }
+    
     return;
 }
