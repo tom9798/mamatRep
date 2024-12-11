@@ -30,7 +30,7 @@ void operate(FILE *f){
     while (fscanf(f, "%d", &grade) != EOF) {
         line += 1;
         if (grade>100 | grade <0){
-            printf("Error at line %d: invalid input %d", line, grade);
+            printf("Error at line %d: invalid input %d\n", line, grade);
             return;
         };
         num_grades++;
