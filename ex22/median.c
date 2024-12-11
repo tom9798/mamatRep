@@ -65,7 +65,7 @@ void operate(FILE *f){
     //find the median
     int median;
     median = grades[(num_grades + 1)/ 2];
-    printf("%d \n", median);
+    printf("%d\n", median);
     free(grades);
     
     return;
