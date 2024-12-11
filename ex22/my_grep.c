@@ -1,18 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-
-//./my_grep file.txt "a*b" will search for "a*b" in file.txt
-//^ is the beginning of the line
-//$ is the end of the line
-//. is any character
-//* is 0 or more of the preceding character
-
-//don't use strstr command
-//return the line number and the line
-
-//if the pattern is not found, return -1
-//if the pattern is found, return the line number
 
 void my_grep(FILE *f, char *pattern){
     char line[1000];
@@ -49,7 +36,7 @@ int main(int argc, char *argv[]) {
     }else{
         f=fopen(argv[1], "r");
         if(f==NULL){
-            printf("Error opening file\n");
+            printf("Error occurred\n");
             return 1;
         }
     }

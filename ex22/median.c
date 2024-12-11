@@ -1,13 +1,8 @@
-//include all standard libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <stdbool.h>
-
 
 void operate(FILE *f);
-
 int main(int argc, char *argv[]) {
     FILE *f;
     if(argc == 1 || !strcmp(argv[1], "-")){
@@ -15,11 +10,12 @@ int main(int argc, char *argv[]) {
     }else{
         f=fopen(argv[1], "r");
         if(f==NULL){
-            printf("Error opening file\n");
+            printf("Error occurred\n");
             return 1;
         }
     }
     operate(f);
+    return 1;
 }
 
 int compare(const void *a, const void *b){
@@ -34,9 +30,7 @@ void operate(FILE *f){
     while (fscanf(f, "%d", &grade) != EOF) {
         line += 1;
         if (grade>100 | grade <0){
-//            printf("Error at line %d: invalid input %d\n", line, grade);
-//print the error to the stderr
-            fprintf(stderr, "Error at line %d: invalid input %d\n", line, grade);
+            printf("Error at line %d: invalid input %d", line, grade);
             return;
         };
         num_grades++;
@@ -65,7 +59,7 @@ void operate(FILE *f){
     //find the median
     int median;
     median = grades[(num_grades + 1)/ 2];
-    printf("%d \n", median);
+    printf("%d\n", median);
     free(grades);
     
     return;

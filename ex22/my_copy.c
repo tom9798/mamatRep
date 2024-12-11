@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     }else{
         f=fopen(argv[1], "r");
         if(f==NULL){
-            printf("Error opening file\n");
+            printf("Error occurred\n");
             return 1;
         }
     }
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     }else{
         f2=fopen(argv[2], "w");
         if(f2==NULL){
-            printf("Error opening file\n");
+            printf("Error occurred\n");
             return 1;
         }
     }
