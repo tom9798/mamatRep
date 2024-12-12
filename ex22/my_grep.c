@@ -24,18 +24,16 @@ void my_grep(FILE *f, char *pattern){
                 int j = 1;
                 while (pattern[j] != '\0') {
                     if (line[i + j - 1] != pattern[j]) {
-                        printf("%d: %s", line_number, line);
+                        break;
                     }
                     j++;
                 }
                 if (pattern[j] == '\0') {
                     printf("%d: %s", line_number, line);
-                    return;
                 }
             }
         }
     }
-    printf("-1\n");
     return;
 }
 
