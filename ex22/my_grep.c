@@ -6,10 +6,10 @@ void my_grep(FILE *f, char *pattern){
     int line_number = 0;
     int check = 0;
     switch (pattern[0]) {
-        case '^': check = 1; line++;
-        case '$': check = 2; line++;
-        case '.': check = 3; line++;
-        case '*': check = 4; line++;
+        case '^': check = 1;
+        case '$': check = 2;
+        case '.': check = 3;
+        case '*': check = 4;
     }
     while(fgets(line, 1000, f) != NULL){
         line_number++;
