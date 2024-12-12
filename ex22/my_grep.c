@@ -19,47 +19,17 @@ void my_grep(FILE *f, char *pattern){
             if (line[i] == '\0') {
                 break;
             }
-            //check if the pattern is at the end of the line
-            if (check == 1 && line[i] == pattern[1]) {
+            //^ means the pattern is at the beginning of the line
+            if(check == 1 & i == 0) {
                 int j = 1;
                 while (pattern[j] != '\0') {
-                    if (line[i + j] != pattern[j]) {
+                    if (line[i + j - 1] != pattern[j]) {
                         break;
                     }
                     j++;
                 }
                 if (pattern[j] == '\0') {
-                    printf("Line %d: %s", line_number, line);
-                    return;
-                }
-                //check if the pattern is at the beginning of the line
-            } else if (check == 2 && line[i] == pattern[1]) {
-                int j = 1;
-                while (pattern[j] != '\0') {
-                    if (line[i + j] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\0') {
-                    printf("Line %d: %s", line_number, line);
-                    return;
-                }
-            //check if a char is anywhere in the line
-            } else if (check == 3 && line[i] == pattern[1]) {
-                printf("Line %d: %s", line_number, line);
-                return;
-            //check if the previous char is in the line 0 or more times
-            } else if (check == 4 && line[i] == pattern[1]) {
-                int j = 1;
-                while (pattern[j] != '\0') {
-                    if (line[i + j] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\0') {
-                    printf("Line %d: %s", line_number, line);
+                    printf("%d: %s", line_number, line);
                     return;
                 }
             }
