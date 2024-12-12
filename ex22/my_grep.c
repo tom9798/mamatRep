@@ -4,21 +4,59 @@
 void my_grep(FILE *f, char *pattern){
     char line[1000];
     int line_number = 0;
+    int check = 0;
+    switch (pattern[0]) {
+        case '^': check = 1; line++;
+        case '$': check = 2; line++;
+        case '.': check = 3; line++;
+        case '*': check = 4; line++;
+    }
     while(fgets(line, 1000, f) != NULL){
         line_number++;
-        for(int i = 0; i < 1000; i++){
-            if(line[i] == '\0'){
+        for(int i = 0; i < 1000; i++) {
+            if (line[i] == '\0') {
                 break;
             }
-            if(line[i] == pattern[0]){
-                int j = 0;
-                while(pattern[j] != '\0'){
-                    if(line[i+j] != pattern[j]){
+            //check if the pattern is at the end of the line
+            if (check == 1 & line[i] == pattern[1]) {
+                int j = 1;
+                while (pattern[j] != '\0') {
+                    if (line[i + j] != pattern[j]) {
                         break;
                     }
                     j++;
                 }
-                if(pattern[j] == '\0'){
+                if (pattern[j] == '\0') {
+                    printf("Line %d: %s", line_number, line);
+                    return;
+                }
+                //check if the pattern is at the beginning of the line
+            } else if (check == 2 & line[i] == pattern[1]) {
+                int j = 1;
+                while (pattern[j] != '\0') {
+                    if (line[i + j] != pattern[j]) {
+                        break;
+                    }
+                    j++;
+                }
+                if (pattern[j] == '\0') {
+                    printf("Line %d: %s", line_number, line);
+                    return;
+                }
+            //check if a char is anywhere in the line
+            } else if (check == 3 & line[i] == pattern[1]) {
+                printf("Line %d: %s", line_number, line);
+                return;
+            //check if the previous char is in the line 0 or more times
+            } else if (check == 4 & line[i] == pattern[1]) {
+                int j = 1;
+                while (pattern[j] != '\0') {
+                    if (line[i + j] != pattern[j]) {
+                        break;
+                    }
+                    j++;
+                }
+                if (pattern[j] == '\0') {
                     printf("Line %d: %s", line_number, line);
                     return;
                 }
@@ -44,3 +82,13 @@ int main(int argc, char *argv[]) {
     fclose(f);
     return 0;
 }
+
+
+////check if the pattern is at the end of the line
+//if(check == 1 & line[i+j] == '\0') {
+//break;
+//}
+////check if the pattern is at the beginning of the line
+//if(check == 2 & i == 0){
+//break;
+//}
