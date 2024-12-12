@@ -2,7 +2,21 @@
 #include <stdlib.h>
 
 void my_grep(FILE *f, char *pattern){
-    int size = sizeof pattern;
+    int size = 0;
+    int l = 0;
+    while (input[l] != '\0') {
+        if (input[l] == '\'') {
+            // Move to the next character after the opening single quote
+            i++;
+            while (input[l] != '\0' && input[l] != '\'') {
+                size++;
+                l++;
+            }
+            break;
+        }
+        i++;
+    }
+//    int size = sizeof pattern;
     int length = 0;
     char line[1000];
     int line_number = 0;
@@ -38,7 +52,7 @@ void my_grep(FILE *f, char *pattern){
                 if (pattern[j] == '\0') {
                     printf("%d: %s", line_number, line);
                 }
-            }else if(check == 2 & line[length-1] == '\0') {
+            }else if(check == 2 & line[length-1-size] == '\0') {
                 int j = 1;
                 while (pattern[j] != '\0') {
                     if (line[length-size-2+j] != pattern[j]) {
