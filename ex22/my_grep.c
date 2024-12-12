@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 void my_grep(FILE *f, char *pattern){
-    char line[1000];
+    int size = sizeof pattern;
+    char line[size];
     int line_number = 0;
     int check = 0;
     switch (pattern[0]) {
@@ -14,7 +15,7 @@ void my_grep(FILE *f, char *pattern){
     }
     while(fgets(line, 1000, f) != NULL){
         line_number++;
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < size; i++) {
             if (line[i] == '\0') {
                 break;
             }
@@ -70,7 +71,7 @@ void my_grep(FILE *f, char *pattern){
 
 int main(int argc, char *argv[]) {
     FILE *f;
-    if(argc == 1 || argv[1]== "-"){
+    if(argc == 1 || argv[1] == "-"){
         f=stdin;
     }else{
         f=fopen(argv[1], "r");
