@@ -3,19 +3,26 @@
 
 void my_grep(FILE *f, char *pattern){
     int size = sizeof pattern;
-    char line[size];
+    int length = 0;
+    char line[1000];
     int line_number = 0;
     int check = 0;
     switch (pattern[0]) {
         case '^': check = 1; break; 
         case '$': check = 2; break;
         case '.': check = 3; break;
-        case '*': check = 4; break;
 	default: check =0; break;
+    }
+    if (patter[size-1]=='*'){
+        check = 4;
     }
     while(fgets(line, 1000, f) != NULL){
         line_number++;
-        for(int i = 0; i < size; i++) {
+        //get the line length
+        while (line[length] != '\0') {
+            length++;
+        }
+        for(int i = 0; i < length; i++) {
             if (line[i] == '\0') {
                 break;
             }
@@ -24,6 +31,17 @@ void my_grep(FILE *f, char *pattern){
                 int j = 1;
                 while (pattern[j] != '\0') {
                     if (line[i + j - 1] != pattern[j]) {
+                        break;
+                    }
+                    j++;
+                }
+                if (pattern[j] == '\0') {
+                    printf("%d: %s", line_number, line);
+                }
+            }else if(check == 2 & line[length-1] == '\0') {
+                int j = 1;
+                while (pattern[j] != '\0') {
+                    if (line[length-size-2+j] != pattern[j]) {
                         break;
                     }
                     j++;
