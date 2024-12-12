@@ -24,7 +24,7 @@ void my_grep(FILE *f, char *pattern){
                 int j = 1;
                 while (pattern[j] != '\0') {
                     if (line[i + j - 1] != pattern[j]) {
-                        break;
+                        printf("%d: %s", line_number, line);
                     }
                     j++;
                 }
