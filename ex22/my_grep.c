@@ -4,17 +4,17 @@
 void my_grep(FILE *f, char *pattern){
     int size = 0;
     int l = 0;
-    while (input[l] != '\0') {
-        if (input[l] == '\'') {
+    while (pattern[l] != '\0') {
+        if (pattern[l] == '\'') {
             // Move to the next character after the opening single quote
-            i++;
-            while (input[l] != '\0' && input[l] != '\'') {
+            l++;
+            while (pattern[l] != '\0' && pattern[l] != '\'') {
                 size++;
                 l++;
             }
             break;
         }
-        i++;
+        l++;
     }
 //    int size = sizeof pattern;
     int length = 0;
@@ -27,7 +27,7 @@ void my_grep(FILE *f, char *pattern){
         case '.': check = 3; break;
 	default: check =0; break;
     }
-    if (patter[size-1]=='*'){
+    if (pattern[size-1]=='*'){
         check = 4;
     }
     while(fgets(line, 1000, f) != NULL){
