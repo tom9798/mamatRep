@@ -77,27 +77,26 @@ bool search_pattern(const char *line, const char *pattern) {
 
     // Handle * after the single quotes at the end of the pattern
     if (pattern[pattern_length - 1] == '*' && pattern[pattern_length - 2] == '\'') {
+        char preceding = pattern[pattern_length - 3];
+        char subpattern[1000];
+        for (int i = 1; i < pattern_length - 3; i++) {
+            subpattern[i - 1] = pattern[i];
+        }
+        subpattern[pattern_length - 3] = '\0';
+        return match_star(line, subpattern);
+    }
+
+    // Handle . character in the pattern
+    if (pattern[0] == '\'' && pattern[1] == '.') {
         char subpattern[1000];
         for (int i = 1; i < pattern_length - 2; i++) {
             subpattern[i - 1] = pattern[i];
         }
         subpattern[pattern_length - 2] = '\0';
-        return match_star(line, subpattern);
+        return match_start(line, subpattern);
     }
 
-    // Handle . character in the pattern
-    for (int i = 0; i < pattern_length - 1; i++) {
-        if (pattern[i] == '\'' && pattern[i+1] == '.') {
-            char subpattern[1000];
-            for (int j = 1; j < i; j++) {
-                subpattern[j - 1] = pattern[j];
-            }
-            subpattern[i - 1] = '\0';
-            return match_start(line, subpattern);
-        }
-    }
-
-    // Handle case where there's no special character
+    // Handle simple pattern match
     if (pattern[0] == '\'') {
         int i = 1;
         while (pattern[i] != '\'' && pattern[i] != '\0') {
@@ -109,12 +108,11 @@ bool search_pattern(const char *line, const char *pattern) {
                 subpattern[j - 1] = pattern[j];
             }
             subpattern[i - 1] = '\0';
-            return match_star(line, subpattern);
+            return match_start(line, subpattern);
         }
     }
 
-    // Fallback to general match if no special sign
-    return match_star(line, pattern);
+    return false; // No match found
 }
 
 // Main function for grep
