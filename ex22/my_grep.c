@@ -5,10 +5,10 @@ void my_grep(FILE *f, char *pattern){
     int size = 0;
     int l = 0;
     while (pattern[l] != '\0') {
-        if (pattern[l] == '\'') {
+        if (pattern[l] == '\'' | pattern[l] == '^' | pattern[l] == '$' | pattern[l] == '.') {
             // Move to the next character after the opening single quote
             l++;
-            while (pattern[l] != '\0' && pattern[l] != '\'') {
+            while (pattern[l] != '\0' && pattern[l] != '\'' && pattern[l] != '*') {
                 size++;
                 l++;
             }
@@ -16,6 +16,7 @@ void my_grep(FILE *f, char *pattern){
         }
         l++;
     }
+    printf("size: %d\n", size);
 //    int size = sizeof pattern;
     int length = 0;
     char line[1000];
