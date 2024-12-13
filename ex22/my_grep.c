@@ -52,10 +52,12 @@ void my_grep(FILE *f, char *pattern){
                 if (pattern[j] == '\0') {
                     printf("%d: %s", line_number, line);
                 }
-            }else if(check == 2 & line[length-1-size] == '\0') {
+            }
+            //$ means the pattern is at the end of the line
+            if(check == 2 & line[i+size] == '\0') {
                 int j = 1;
                 while (pattern[j] != '\0') {
-                    if (line[length-size-2+j] != pattern[j]) {
+                    if (line[i+j] != pattern[j]) {
                         break;
                     }
                     j++;
@@ -64,6 +66,18 @@ void my_grep(FILE *f, char *pattern){
                     printf("%d: %s", line_number, line);
                 }
             }
+//            else if(check == 2 & line[length-1-size] == '\0') {
+//                int j = 1;
+//                while (pattern[j] != '\0') {
+//                    if (line[length-size-2+j] != pattern[j]) {
+//                        break;
+//                    }
+//                    j++;
+//                }
+//                if (pattern[j] == '\0') {
+//                    printf("%d: %s", line_number, line);
+//                }
+//            }
         }
     }
     return;
