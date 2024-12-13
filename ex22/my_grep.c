@@ -40,6 +40,18 @@ void my_grep(FILE *f, char *pattern){
             if (line[i] == '\0') {
                 break;
             }
+            if(check == 0){
+                int j = 0;
+                while (pattern[j] != '\0') {
+                    if (line[i + j] != pattern[j]) {
+                        break;
+                    }
+                    j++;
+                }
+                if (pattern[j] == '\0') {
+                    printf("%d: %s", line_number, line);
+                }
+            }
             //^ means the pattern is at the beginning of the line
             if(check == 1 & i == 0) {
                 int j = 1;
