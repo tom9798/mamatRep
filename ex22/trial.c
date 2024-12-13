@@ -14,7 +14,7 @@ int strlen_custom(const char *str) {
 // Function to check if a pattern matches at the beginning of the line
 bool match_start(const char *line, const char *pattern) {
     for (int i = 0; pattern[i] != '\0'; i++) {
-        if (line[i] != pattern[i]) {
+        if (pattern[i] != '.' && line[i] != pattern[i]) {
             return false;
         }
     }
@@ -32,7 +32,7 @@ bool match_end(const char *line, const char *pattern) {
 
     int offset = line_length - pattern_length;
     for (int i = 0; pattern[i] != '\0'; i++) {
-        if (line[offset + i] != pattern[i]) {
+        if (pattern[i] != '.' && line[offset + i] != pattern[i]) {
             return false;
         }
     }
@@ -45,12 +45,8 @@ bool match_star(const char *line, const char *pattern) {
         return true;
     }
 
-    if (pattern[1] != '*') {
-        return match_start(line, pattern);
-    }
-
     char preceding = pattern[0];
-    const char *remaining_pattern = pattern + 2;
+    const char *remaining_pattern = pattern + 1;
     int i = 0;
 
     while (line[i] != '\0') {
@@ -70,16 +66,43 @@ bool search_pattern(const char *line, const char *pattern) {
     int pattern_length = strlen_custom(pattern);
 
     // Handle end of line '$' at the beginning of the pattern
-    if (pattern[0] == '$') {
-        return match_end(line, pattern + 1);
+    if (pattern[0] == '$' && pattern[1] == '\'') {
+        return match_end(line, pattern + 2);
     }
 
-    // Handle beginning of line '^'
-    if (pattern[0] == '^') {
-        return match_start(line, pattern + 1);
+    // Handle beginning of line '^' at the beginning of the pattern
+    if (pattern[0] == '^' && pattern[1] == '\'') {
+        return match_start(line, pattern + 2);
     }
 
-    // Handle *
+    // Handle * after the single quotes at the end of the pattern
+    if (pattern[pattern_length - 1] == '*' && pattern[pattern_length - 2] == '\'') {
+        char preceding = pattern[pattern_length - 3];
+        char subpattern[1000];
+        for (int i = 1; i < pattern_length - 3; i++) {
+            subpattern[i - 1] = pattern[i];
+        }
+        subpattern[pattern_length - 3] = '\0';
+        return match_star(line, subpattern);
+    }
+
+    // Handle case where there's no special character
+    if (pattern[0] == '\'') {
+        int i = 1;
+        while (pattern[i] != '\'' && pattern[i] != '\0') {
+            i++;
+        }
+        if (pattern[i] == '\'') {
+            char subpattern[1000];
+            for (int j = 1; j < i; j++) {
+                subpattern[j - 1] = pattern[j];
+            }
+            subpattern[i - 1] = '\0';
+            return match_star(line, subpattern);
+        }
+    }
+
+    // Fallback to general match if no special sign
     return match_star(line, pattern);
 }
 
