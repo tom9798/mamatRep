@@ -13,14 +13,12 @@ int strlen_custom(const char *str) {
 
 // Function to check if a pattern matches at the beginning of the line
 bool match_start(const char *line, const char *pattern) {
-    int i = 0;
-    while (pattern[i] != '\0' && line[i] != '\0') {
-        if (pattern[i] != line[i]) {
+    for (int i = 0; pattern[i] != '\0'; i++) {
+        if (line[i] != pattern[i]) {
             return false;
         }
-        i++;
     }
-    return pattern[i] == '\0';
+    return true;
 }
 
 // Function to check if a pattern matches at the end of the line
@@ -33,12 +31,10 @@ bool match_end(const char *line, const char *pattern) {
     }
 
     int offset = line_length - pattern_length;
-    int i = 0;
-    while (pattern[i] != '\0') {
+    for (int i = 0; pattern[i] != '\0'; i++) {
         if (line[offset + i] != pattern[i]) {
             return false;
         }
-        i++;
     }
     return true;
 }
@@ -71,20 +67,19 @@ bool match_star(const char *line, const char *pattern) {
 
 // Function to search for a pattern in a line
 bool search_pattern(const char *line, const char *pattern) {
+    int pattern_length = strlen_custom(pattern);
+
+    // Handle end of line '$' at the beginning of the pattern
+    if (pattern[0] == '$') {
+        return match_end(line, pattern + 1);
+    }
+
+    // Handle beginning of line '^'
     if (pattern[0] == '^') {
         return match_start(line, pattern + 1);
     }
 
-    if (pattern[strlen_custom(pattern) - 1] == '$') {
-        char subpattern[1000];
-        int i;
-        for (i = 0; pattern[i] != '$'; i++) {
-            subpattern[i] = pattern[i];
-        }
-        subpattern[i] = '\0';
-        return match_end(line, subpattern);
-    }
-
+    // Handle *
     return match_star(line, pattern);
 }
 
