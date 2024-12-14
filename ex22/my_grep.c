@@ -1,85 +1,110 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void my_grep(FILE *f, char *pattern){
     int size = 0;
     int l = 0;
     while (pattern[l] != '\0') {
-        if (pattern[l] == '\'' | pattern[l] == '^' | pattern[l] == '$' | pattern[l] == '.') {
-            // Move to the next character after the opening single quote
-            l++;
-            while (pattern[l] != '\0' && pattern[l] != '\'' && pattern[l] != '*') {
-                size++;
-                l++;
-            }
-            break;
+        if (pattern[l] != '\'' && pattern[l] != '^' && pattern[l] != '$' && pattern[l] != '*') {
+            size++;
         }
         l++;
     }
-    printf("size: %d\n", size);
-//    int size = sizeof pattern;
+//    printf("########size: %d\n", size);
+
     int length = 0;
     char line[1000];
     int line_number = 0;
-    int check = 0;
+    int check;
+    bool linePrinted;
+
     switch (pattern[0]) {
         case '^': check = 1; break; 
         case '$': check = 2; break;
         case '.': check = 3; break;
 	default: check =0; break;
     }
+
     if (pattern[size-1]=='*'){
         check = 4;
     }
+
     while(fgets(line, 1000, f) != NULL){
+
         line_number++;
+
+//        printf("##########line: %s\n", line);
+
         //get the line length
-        while (line[length] != '\0') {
+        while (line[length-1] != '\n' && line[length] != '\0') {
+            //if it's the last line, add 1 to the length
             length++;
         }
+        if (line[length-1] != '\n') {
+            length++;
+        }
+
+//        printf("###########length: %d\n", length);
+
+        linePrinted = false;
+
+        //going through the line
         for(int i = 0; i < length; i++) {
             if (line[i] == '\0') {
                 break;
             }
-            if(check == 0){
-                int j = 0;
-                while (pattern[j] != '\0') {
-                    if (line[i + j] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\0') {
-                    printf("%d: %s", line_number, line);
-                }
-            }
-            //^ means the pattern is at the beginning of the line
-            if(check == 1 & i == 0) {
+
+            //the pattern is somewhere in the line
+            if (check == 0) {
                 int j = 1;
                 while (pattern[j] != '\0') {
+//                    printf("pattern[j]: %c, line[i+j]: %c\n", pattern[j], line[i+j-1]);
                     if (line[i + j - 1] != pattern[j]) {
                         break;
                     }
                     j++;
                 }
-                if (pattern[j] == '\0') {
+                if (pattern[j] == '\'' && !linePrinted) {
+                    linePrinted = true;
                     printf("%d: %s", line_number, line);
                 }
             }
-            //$ means the pattern is at the end of the line
-            if (check == 2 && length >= size - 1) {
-                int j = 0;
-                while (pattern[j] != '\0' && pattern[j] != '$') {
-                    if (line[length - size + j] != pattern[j]) {
+
+
+            //^ means the pattern is at the beginning of the line
+            if(check == 1 & i == 0) {
+                int j = 2;
+                while (pattern[j] != '\0') {
+//                    printf("pattern[j]: %c, line[i+j]: %c\n", pattern[j], line[i+j-2]);
+                    if (line[i + j - 2] != pattern[j]) {
                         break;
                     }
                     j++;
                 }
-                if (pattern[j] == '$') {
-                    printf("%d: %s\n", line_number, line);
+                if (pattern[j] == '\'' && !linePrinted) {
+                    linePrinted = true;
+                    printf("%d: %s", line_number, line);
+                }
+            }
+
+
+            //$ means the pattern is at the end of the line
+            if(check == 2 & i == length - size - 1) {
+                int j = 2;
+                while (pattern[j] != '\0') {
+                    if (line[i + j - 2] != pattern[j]) {
+                        break;
+                    }
+                    j++;
+                }
+                if (pattern[j] == '\'' && !linePrinted) {
+                    linePrinted = true;
+                    printf("%d: %s", line_number, line);
                 }
             }
         }
+        length = 0;
     }
     return;
 }
@@ -99,13 +124,3 @@ int main(int argc, char *argv[]) {
     fclose(f);
     return 0;
 }
-
-
-////check if the pattern is at the end of the line
-//if(check == 1 & line[i+j] == '\0') {
-//break;
-//}
-////check if the pattern is at the beginning of the line
-//if(check == 2 & i == 0){
-//break;
-//}
