@@ -2,16 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-//if (line[i + j - 1] != pattern[j]) {
-//break;
-//}
-//j++;
-//}
-//if (pattern[j] == '\'' && !linePrinted) {
-//linePrinted = true;
-//printf("%d: %s", line_number, line);
-//}
-
 void search(int j, char *pattern, char *line, int i, bool *linePrinted, int line_number) {
     int offset = j;
     if (line[i + j - offset] != pattern[j]) {
