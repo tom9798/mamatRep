@@ -69,7 +69,7 @@ void search_in_file(const char *filename, const char *pattern) {
     char line[MAX_LINE];
     while (fgets(line, sizeof(line), file) != NULL) {
         if (match_pattern(line, pattern)) {
-            printf("%s: %s", filename, line);
+            printf("%s", line);
         }
     }
 
