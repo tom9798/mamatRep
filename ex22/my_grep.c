@@ -1,127 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-void my_grep(FILE *f, char *pattern){
-    int size = 0;
-    int l = 0;
-    while (pattern[l] != '\0') {
-        printf("########pattern[l]: %c\n", pattern[l]);
-        if (pattern[l] != '\'' && pattern[l] != '^' && pattern[l] != '$' && pattern[l] != '*' && pattern[l] != '"') {
-            size++;
-        }
-        l++;
-    }
-    printf("########size: %d\n", size);
+#define MAX_LINE 1024
 
+// Function to calculate the length of a string
+int my_strlen(const char *str) {
     int length = 0;
-    char line[1000];
-    int line_number = 0;
-    int check;
-    bool linePrinted;
-
-    switch (pattern[0]) {
-        case '^': check = 1; break;
-        case '$': check = 2; break;
-        case '.': check = 3; break;
-	default: check =0; break;
+    while (str[length] != '\0') {
+        length++;
     }
-
-    if (pattern[size-1]=='*'){
-        check = 4;
-    }
-
-    while(fgets(line, 1000, f) != NULL){
-
-        line_number++;
-
-//        printf("##########line: %s\n", line);
-
-        //get the line length
-        while (line[length-1] != '\n' && line[length] != '\0') {
-            //if it's the last line, add 1 to the length
-            length++;
-        }
-        if (line[length-1] != '\n') {
-            length++;
-        }
-
-//        printf("###########length: %d\n", length);
-
-        linePrinted = false;
-
-        //going through the line
-        for(int i = 0; i < length; i++) {
-            if (line[i] == '\0') {
-                break;
-            }
-
-            //the pattern is somewhere in the line
-            if (check == 0) {
-                int j = 1;
-                while (pattern[j] != '\0') {
-//                    printf("pattern[j]: %c, line[i+j]: %c\n", pattern[j], line[i+j-1]);
-                    if (line[i + j - 1] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\'' && !linePrinted) {
-                    linePrinted = true;
-                    printf("%d: %s", line_number, line);
-                }
-            }
-
-
-            //^ means the pattern is at the beginning of the line
-            if(check == 1 & i == 0) {
-                int j = 2;
-                while (pattern[j] != '\0') {
-//                    printf("pattern[j]: %c, line[i+j]: %c\n", pattern[j], line[i+j-2]);
-                    if (line[i + j - 2] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\'' && !linePrinted) {
-                    linePrinted = true;
-                    printf("%d: %s", line_number, line);
-                }
-            }
-
-
-            //$ means the pattern is at the end of the line
-            if(check == 2 & i == length - size - 1) {
-                int j = 2;
-                while (pattern[j] != '\0') {
-                    if (line[i + j - 2] != pattern[j]) {
-                        break;
-                    }
-                    j++;
-                }
-                if (pattern[j] == '\'' && !linePrinted) {
-                    linePrinted = true;
-                    printf("%d: %s", line_number, line);
-                }
-            }
-        }
-        length = 0;
-    }
-    return;
+    return length;
 }
 
-int main(int argc, char *argv[]) {
-    FILE *f;
-    if(argc == 1 || argv[1] == "-"){
-        f=stdin;
-    }else{
-        f=fopen(argv[1], "r");
-        if(f==NULL){
-            printf("Error occurred\n");
+// Function to check if a character matches, considering '.' wildcard
+int char_match(char c, char p) {
+    return (p == '.') || (c == p);
+}
+
+// Helper function to match from a specific point in the line
+int match_from(const char *line, const char *pattern) {
+    if (*pattern == '\0') {
+        return 1;
+    }
+    if (*pattern == '$' && *(pattern + 1) == '\0') {
+        return *line == '\0' || *line == '\n';
+    }
+
+    if (*(pattern + 1) == '*') {
+        while (*line && char_match(*line, *pattern)) {
+            if (match_from(line, pattern + 2)) {
+                return 1;
+            }
+            line++;
+        }
+        return match_from(line, pattern + 2);
+    }
+    if (*line && char_match(*line, *pattern)) {
+        return match_from(line + 1, pattern + 1);
+    }
+
+    return 0;
+}
+
+// Function to match a line against a pattern
+int match_pattern(const char *line, const char *pattern) {
+    if (pattern[0] == '^') {  // Pattern should match from the start
+        return match_from(line, pattern + 1);
+    }
+
+    int line_len = my_strlen(line);
+    int pattern_len = my_strlen(pattern);
+    for (int i = 0; i <= line_len - pattern_len; i++) {
+        if (match_from(line + i, pattern)) {
             return 1;
         }
     }
-    my_grep(f, argv[2]);
-    fclose(f);
+    return 0;
+}
+
+// Function to search lines in a file
+void search_in_file(const char *filename, const char *pattern) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    char line[MAX_LINE];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        if (match_pattern(line, pattern)) {
+            printf("%s: %s", filename, line);
+        }
+    }
+
+    fclose(file);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <file> <pattern>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    search_in_file(argv[1], argv[2]);
     return 0;
 }
