@@ -3,7 +3,7 @@ CFLAGS=-g -Wall -fPIC -std=c99
 LDFLAGS=-shared
 OBJS=grades.o
 LIB=libgrades.so
-RM=rm -f *.o *.so
+RM=rm -f
 
 all: $(LIB)
 
@@ -12,8 +12,6 @@ $(LIB): $(OBJS)
 
 grades.o: grades.c grades.h linked-list.h
 	$(CC) $(CFLAGS) -c grades.c
-
-
 
 clean:
 	$(RM) $(OBJS) $(LIB)
