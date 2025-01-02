@@ -11,7 +11,7 @@ $(LIB): $(OBJS)
 	$(CC) $(LDFLAGS) -o $(LIB) $(OBJS) -L. -llinked-list
 
 grades.o: grades.c grades.h linked-list.h
-	$(CC) $(CFLAGS) -c grades.c
+	$(CC) $(CFLAGS) -c grades.c -o grades.o
 
 clean:
 	$(RM) $(OBJS) $(LIB)
