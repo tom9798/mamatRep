@@ -1,0 +1,3 @@
+C:/Users/soust/OneDrive - Technion/mamat/ex4/cmake-build-debug/CMakeFiles/grades.dir
+C:/Users/soust/OneDrive - Technion/mamat/ex4/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/soust/OneDrive - Technion/mamat/ex4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
