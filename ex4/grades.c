@@ -12,8 +12,8 @@ typedef struct course {
 
 //clone course
 int course_clone(void *element, void **output) {
-    course *course = (struct course *)element;
-    course *new_course = malloc(sizeof(course));
+    course* course = (struct course *)element;
+    course* new_course = malloc(sizeof(course));
     if (new_course == NULL) {
         return 1;
     }
@@ -30,7 +30,7 @@ int course_clone(void *element, void **output) {
 
 //destroy course
 void course_destroy(void *element) {
-    course *course = (struct course *)element;
+    course* course = (struct course *)element;
     free(course->name);
     free(course);
 }
@@ -46,8 +46,8 @@ typedef struct student {
 
 //clone student
 int student_clone(void *element, void **output) {
-    student *student = (struct student *)element;
-    student *new_student = malloc(sizeof(student));
+    student* student = (struct student *)element;
+    student* new_student = malloc(sizeof(student));
     if (new_student == NULL) {
         return 1;
     }
