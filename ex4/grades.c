@@ -12,7 +12,7 @@ typedef struct course {
 
 //clone course
 int course_clone(void *element, void **output) {
-    course* course = (struct course *)element;
+    course* course = (course *)element;
     course* new_course = malloc(sizeof(course));
     if (new_course == NULL) {
         return 1;
@@ -30,7 +30,7 @@ int course_clone(void *element, void **output) {
 
 //destroy course
 void course_destroy(void *element) {
-    course* course = (struct course *)element;
+    course* course = (course *)element;
     free(course->name);
     free(course);
 }
@@ -46,7 +46,7 @@ typedef struct student {
 
 //clone student
 int student_clone(void *element, void **output) {
-    student* student = (struct student *)element;
+    student* student = (student *)element;
     student* new_student = malloc(sizeof(student));
     if (new_student == NULL) {
         return 1;
@@ -71,7 +71,7 @@ int student_clone(void *element, void **output) {
 
 //destroy student
 void student_destroy(void *element) {
-    student *student = (struct student *)element;
+    student *student = (student *)element;
     free(student->name);
     list_destroy(student->courses);
     free(student);
@@ -95,13 +95,13 @@ struct grades* grades_init() {
     return grades;
 }
 
-void grades_destroy(struct grades *grades) {
+void grades_destroy(grades *grades) {
     list_destroy(grades->students);
     free(grades);
 }
 
-int grades_add_student(struct grades *grades, const char *name, int id) {
-    struct student *student = malloc(sizeof(student));
+int grades_add_student(grades *grades, const char *name, int id) {
+    student *student = malloc(sizeof(student));
     if (student == NULL) {
         return 1;
     }
@@ -127,15 +127,15 @@ int grades_add_student(struct grades *grades, const char *name, int id) {
     return 0;
 }
 
-int grades_add_grade(struct grades *grades, const char *name, int id, int grade) {
+int grades_add_grade(grades *grades, const char *name, int id, int grade) {
     if (grade < 0 || grade > 100) {
         return 1;
     }
     struct iterator *it = list_begin(grades->students);
     while (it) {
-        struct student *student = list_get(it);
+        student *student = list_get(it);
         if (student->id == id && student->name != name) {
-            struct course *course = malloc(sizeof(course));
+            course *course = malloc(sizeof(course));
             if (course == NULL) {
                 return 1;
             }
@@ -158,16 +158,16 @@ int grades_add_grade(struct grades *grades, const char *name, int id, int grade)
     return 1;
 }
 
-float grades_calc_avg(struct grades *grades, int id, char **out) {
+float grades_calc_avg(grades *grades, int id, char **out) {
     struct iterator *it = list_begin(grades->students);
     while (it) {
-        struct student *student = list_get(it);
+        student *student = list_get(it);
         if (student->id == id) {
             struct iterator *it2 = list_begin(student->courses);
             int sum = 0;
             int count = 0;
             while (it2) {
-                struct course *course = list_get(it2);
+                course *course = list_get(it2);
                 sum += course->grade;
                 count++;
                 it2 = list_next(it2);
@@ -190,15 +190,15 @@ float grades_calc_avg(struct grades *grades, int id, char **out) {
 }
 
 //check if list begin is the first element inserted
-int grades_print_student(struct grades *grades, int id) {
+int grades_print_student(grades *grades, int id) {
     struct iterator *it = list_begin(grades->students);
     while (it) {
-        struct student *student = list_get(it);
+        student *student = list_get(it);
         if (student->id == id) {
             printf("%s %d: ", student->name, student->id);
             struct iterator *it2 = list_begin(student->courses);
             while (it2) {
-                struct course *course = list_get(it2);
+                course *course = list_get(it2);
                 printf("%s %d, ", course->name, course->grade);
                 it2 = list_next(it2);
             }
@@ -210,17 +210,17 @@ int grades_print_student(struct grades *grades, int id) {
     return 1;
 }
 
-int grades_print_all(struct grades *grades) {
+int grades_print_all(grades *grades) {
     if (grades->students == NULL) {
         return 1;
     }
     struct iterator *it = list_begin(grades->students);
     while (it) {
-        struct student *student = list_get(it);
+        student *student = list_get(it);
         printf("%s %d: ", student->name, student->id);
         struct iterator *it2 = list_begin(student->courses);
         while (it2) {
-            struct course *course = list_get(it2);
+            course *course = list_get(it2);
             printf("%s %d, ", course->name, course->grade);
             it2 = list_next(it2);
         }
