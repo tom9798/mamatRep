@@ -17,8 +17,7 @@ break read_six_numbers
 run
 continue
 # Inspect the stack to find the base address of the passcode numbers
-x/6dw \$rsp
-continue
+x/24xw \$rsp
 EOF
 
 # Create an input file for the program, containing the answers to the first and second phases
@@ -28,13 +27,16 @@ echo -e "$PHASE1_ANSWER\n$PHASE2_INPUT" > input.txt
 gdb -batch -x $GDB_CMDS --args $BINARY < input.txt > gdb_output.txt
 
 # Extract the memory addresses from the gdb output
-ADDRESSES=($(grep -A 6 'x/6dw' gdb_output.txt | tail -n 6 | awk '{print $1}'))
+ADDRESSES=($(grep -A 24 'x/24xw' gdb_output.txt | grep '0x' | awk '{print $1}'))
 
 # Check if the addresses were correctly identified
-if [ ${#ADDRESSES[@]} -ne 6 ]; then
+if [ ${#ADDRESSES[@]} -lt 6 ]; then
     echo "Error: Could not determine the correct memory addresses."
     exit 1
 fi
+
+# Only take the first six addresses
+ADDRESSES=("${ADDRESSES[@]:0:6}")
 
 # Create a new gdb commands file to set watchpoints and print values
 cat <<EOF > $GDB_CMDS
