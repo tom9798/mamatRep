@@ -6,24 +6,44 @@ BINARY="./vault"
 # The answer to the first phase
 PHASE1_ANSWER="Wow! Brazil is big."
 
-# Addresses where the passcodes are stored
-ADDRESSES=(
-    "0x7fffffffdc00"
-    "0x7fffffffdc04"
-    "0x7fffffffdc08"
-    "0x7fffffffdc0c"
-    "0x7fffffffdc10"
-    "0x7fffffffdc14"
-)
+# Random input for the second phase
+PHASE2_INPUT="1 2 3 4 5 6"
 
-# Prepare the gdb commands file
+# Prepare the initial gdb commands file to find memory addresses
 GDB_CMDS="gdb_cmds.txt"
+cat <<EOF > $GDB_CMDS
+set pagination off
+break read_six_numbers
+run
+continue
+# Inspect the stack to find the base address of the passcode numbers
+x/6dw \$rsp
+continue
+EOF
+
+# Create an input file for the program, containing the answers to the first and second phases
+echo -e "$PHASE1_ANSWER\n$PHASE2_INPUT" > input.txt
+
+# Run gdb with the initial commands to find the memory addresses and capture the output
+gdb -batch -x $GDB_CMDS --args $BINARY < input.txt > gdb_output.txt
+
+# Extract the memory addresses from the gdb output
+ADDRESSES=($(grep -A 6 'x/6dw' gdb_output.txt | tail -n 6 | awk '{print $1}'))
+
+# Check if the addresses were correctly identified
+if [ ${#ADDRESSES[@]} -ne 6 ]; then
+    echo "Error: Could not determine the correct memory addresses."
+    exit 1
+fi
+
+# Create a new gdb commands file to set watchpoints and print values
 cat <<EOF > $GDB_CMDS
 break phase_2
 run
+continue
 EOF
 
-# Add watchpoints for each address to the gdb commands file
+# Add watchpoints for each found address to the gdb commands file
 for addr in "${ADDRESSES[@]}"; do
     echo "watch *(int *)($addr)" >> $GDB_CMDS
 done
@@ -36,15 +56,12 @@ done
 # Add a command to quit gdb
 echo "quit" >> $GDB_CMDS
 
-# Create an input file for the program, containing the answer to the first phase
-echo "$PHASE1_ANSWER" > input.txt
-
-# Run gdb with the prepared commands file
-gdb -batch -x $GDB_CMDS --args $BINARY < input.txt > gdb_output.txt
+# Run gdb with the new commands file
+gdb -batch -x $GDB_CMDS --args $BINARY < input.txt > gdb_final_output.txt
 
 # Extract and display the passcode numbers from the gdb output
 echo "Passcode numbers:"
-grep "\$" gdb_output.txt | awk '{print $NF}'
+grep "\$" gdb_final_output.txt | awk '{print $NF}'
 
 # Cleanup
-rm $GDB_CMDS gdb_output.txt input.txt
+rm $GDB_CMDS gdb_output.txt gdb_final_output.txt input.txt
