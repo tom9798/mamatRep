@@ -3,6 +3,9 @@
 # File name of the binary to debug
 BINARY="./vault"
 
+# The answer to the first phase
+PHASE1_ANSWER="Wow! Brazil is big."
+
 # Addresses where the passcodes are stored
 ADDRESSES=(
     "0x7fffffffdc00"
@@ -33,12 +36,15 @@ done
 # Add a command to quit gdb
 echo "quit" >> $GDB_CMDS
 
+# Create an input file for the program, containing the answer to the first phase
+echo "$PHASE1_ANSWER" > input.txt
+
 # Run gdb with the prepared commands file
-gdb -batch -x $GDB_CMDS $BINARY > gdb_output.txt
+gdb -batch -x $GDB_CMDS --args $BINARY < input.txt > gdb_output.txt
 
 # Extract and display the passcode numbers from the gdb output
 echo "Passcode numbers:"
 grep "\$" gdb_output.txt | awk '{print $NF}'
 
 # Cleanup
-rm $GDB_CMDS
+rm $GDB_CMDS gdb_output.txt input.txt
