@@ -101,7 +101,13 @@ struct grades* grades_init() {
 }
 
 void grades_destroy(struct grades *grades) {
-    list_destroy(grades->students);
+//    list_destroy(grades->students);
+    struct iterator *it = list_begin(grades->students);
+    while (it) {
+        struct student *student = list_get(it);
+        student_destroy(student);
+        it = list_next(it);
+    }
     free(grades);
 }
 
