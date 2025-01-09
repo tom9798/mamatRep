@@ -70,8 +70,15 @@ int student_clone(void *element, void **output) {
 //destroy student
 void student_destroy(void *element) {
     struct student *student = (struct student*)element;
+
     free(student->name);
-    list_destroy(student->courses);
+//    list_destroy(student->courses);
+    struct iterator *it = list_begin(student->courses);
+    while (it) {
+        struct course *course = list_get(it);
+        course_destroy(course);
+        it = list_next(it);
+    }
     free(student);
 }
 
