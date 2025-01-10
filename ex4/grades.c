@@ -243,6 +243,8 @@ float grades_calc_avg(Grades *grades, int id, char **out){
             return (float)sum/list_size(student->courses_list); //returning the average
         }
     }
+    *out = NULL;
+    return -1;
 }
 
 int grades_print_student(Grades *grades, int id){
@@ -252,7 +254,7 @@ int grades_print_student(Grades *grades, int id){
     struct iterator* itStudent = list_begin(grades->students);
     while(itStudent){
         Student *student = list_get(itStudent);
-        if(itStudent->id == id){
+        if(student->id == id){
             if(!student->courses_list){ //making sure the student has courses
                 return 1;
             }
@@ -272,6 +274,7 @@ int grades_print_student(Grades *grades, int id){
         }
         return 0;
     }
+    return 1;
 }
 
 int grades_print_all(Grades *grades){
