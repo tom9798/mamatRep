@@ -126,7 +126,6 @@ int student_clone(void *elem, void **out) {
     return 0;
 }
 
-
 //####################check if typedef is problematic####################
 typedef struct grades {
     struct list *students;
@@ -209,6 +208,7 @@ int grades_add_grade(Grades *grades, const char *name, int id, int grade) {
             }
             return 0;
         }
+        itStudent = list_next(itStudent);
     }
     return 1;
 }
@@ -242,6 +242,7 @@ float grades_calc_avg(Grades *grades, int id, char **out){
             strcpy(*out, student->name); //copying the name of the student to the out variable
             return (float)sum/list_size(student->courses_list); //returning the average
         }
+        itStudent = list_next(itStudent);
     }
     *out = NULL;
     return -1;
@@ -271,8 +272,9 @@ int grades_print_student(Grades *grades, int id){
                 printf("%s %d", course->name, course->grade); //COURSE-1-NAME COURSE-1-GRADE, [...]
             }
             printf("\n");
+            return 0;
         }
-        return 0;
+        itStudent = list_next(itStudent);
     }
     return 1;
 }
