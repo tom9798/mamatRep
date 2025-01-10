@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "linked-list.h"
 #include "grades.h"
+#include <stdbool.h>
 
 typedef struct course {
     char *name;
@@ -21,12 +22,13 @@ void course_destroy(void *elem) {
     return;
 }
 
-course* init_course(const char *name, int grade) {
+Course* init_course(const char *name, int grade) {
     Course *course = (Course*)malloc(sizeof(Course));
     if (!course) {
         return NULL;
     }
     if (!name) {
+        free(course);
         return NULL;
     }
     course->name = (char*)malloc(strlen(name) + 1); //should we multiply by sizeof(char)?
