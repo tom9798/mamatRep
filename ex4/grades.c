@@ -210,6 +210,7 @@ int grades_add_grade(Grades *grades, const char *name, int id, int grade) {
             return 0;
         }
     }
+    return 1;
 }
 
 float grades_calc_avg(Grades *grades, int id, char **out){
@@ -222,7 +223,7 @@ float grades_calc_avg(Grades *grades, int id, char **out){
     while(itStudent){
         Student *student = list_get(itStudent);
         if(student->id == id){
-            if (!itStudent->courses_list) { //making sure the student has courses
+            if (!student->courses_list) { //making sure the student has courses
                 *out = NULL;
                 return -1;
             }
