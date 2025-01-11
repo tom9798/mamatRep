@@ -10,8 +10,8 @@ static char* String::allocate_and_copy(const char *str, int size) {
 }
 
 //constructor
-String::String(const char *str){
-    length = strlen(str);
+String::String(const char *str) {
+    this->length = strlen(str);
     this->str = allocate_and_copy(str, length);
 }
 
@@ -26,6 +26,16 @@ String::~String(){
     delete[] this->str;
 }
 
+//convert a GenericString to a String, no const
+String& String::as_string() {
+    return dynamic_cast<String&>(*this);
+}
+
+//convert a GenericString to a String, const
+const String& String::as_string() const {
+    return dynamic_cast<const String&>(*this);
+}
+
 //operator=
 String& String::operator=(const char *str){
     if(this->str == str){
@@ -37,8 +47,8 @@ String& String::operator=(const char *str){
     return *this;
 }
 
-//operator== for GenericString
-bool String::operator==(const GenericString &other) const{
+//operator== for GenericString, checks if the string in the object is equal to the string in the other object
+bool String::operator==(const GenericString &other) const {
     const String *other_string = dynamic_cast<const String*>(&other);
     if(other_string == nullptr){
         return false;
@@ -64,11 +74,11 @@ String &String::trim(){
     //check if the string is empty
     int start = 0;
     int end = length - 1;
-    //first remove leading white spaces
+    //first setting the index to remove leading white spaces
     while(start < length && (this->str[start] == ' ' || this->str[start] == '\t')){ //check if it's a white space or a tab
         start++;
     }
-    //then remove trailing white spaces
+    //then setting the index to remove trailing white spaces
     while(end >= 0 && (this->str[end] == ' ' || this->str[end] == '\t')){ //check if it's a white space or a tab
         end--;
     }
@@ -90,4 +100,5 @@ String &String::trim(){
     delete[] this->str;
     this->str = new_str;
 
+    return *this;
 }
