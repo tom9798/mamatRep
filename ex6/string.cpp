@@ -64,16 +64,31 @@ bool String::operator==(const char *other) const{
 //split the string according to delimiters
 //#####################need to implement string-array.cpp and string-array.h#####################
 StringArray String::split(const char *delimiters) const {
-    StringArray result(0);
-    char *str = new char[length + 1];
-    strcpy(str, this->str);
-    char *token = strtok(str, delimiters);
-    while(token != nullptr){
-        result.add(make_string(token));
+    //first we initialize the StringArray object
+    StringArray *array = new StringArray();
+
+    //split this->str according to the given delimiters, using strtok
+    //and find out the size of the needed array of GenericString objects
+    //then allocate memory for the array and copy the strings
+    //then return the array
+    char *copy = allocate_and_copy(this->str, this->length); //we don't want to change the original string
+    char *token = strtok(copy, delimiters); //get the first token to start iterating over the string
+
+    while(token != nullptr){ //count the number of words
+        array->size += 1;
         token = strtok(nullptr, delimiters);
     }
-    delete[] str;
-    return result;
+    array->array = new GenericString*[array->size]; //allocate memory for the array of GenericString objects
+
+    token = strtok(this->str, delimiters); //start iterating over the string again to add the tokens to the array
+    for(int i = 0; i < array->size; i++){
+        array->array[i] = make_string(token);
+        token = strtok(nullptr, delimiters);
+    }
+
+    delete[] copy; //clean up
+
+    return *array;
 }
 
 //convert the string into integer

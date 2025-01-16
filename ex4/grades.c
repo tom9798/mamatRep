@@ -76,12 +76,12 @@ void student_destroy(void *elem) {
 }
 
 Student* init_student(const char *name, int id) {
-    if (!name) {
-//        free(student);
-        return NULL;
-    }
     Student* student = (Student*)malloc(sizeof(Student));
     if (!student) {
+        return NULL;
+    }
+    if (!name) {
+        free(student);
         return NULL;
     }
     student->name = (char*)malloc(strlen(name) + 1); //should we multiply by sizeof(char)?
@@ -126,6 +126,7 @@ int student_clone(void *elem, void **out) {
     return 0;
 }
 
+//####################check if typedef is problematic####################
 typedef struct grades {
     struct list *students;
 } Grades;
@@ -182,16 +183,22 @@ int grades_add_grade(Grades *grades, const char *name, int id, int grade) {
     if (!grades || !grades->students || !name || grade < 0 || grade > 100) {
         return 1;
     }
-    for (struct iterator* itStudent = list_begin(grades->students); itStudent; itStudent = list_next(itStudent)) {
-        Student *student = list_get(itStudent);
-        if (student->id == id) {
-            for (struct iterator* itCourse = list_begin(student->courses_list); itCourse; itCourse = list_next(itCourse)) {
+    struct iterator* itStudent = list_begin(grades->students);
+    while (itStudent) {
+        //looking for the student with the id
+        Student *student = list_get(itStudent); //current student in the iteration
+        if (student->id == id){
+            //now we will iterate through the courses of the relevant student
+            struct iterator* itCourse = list_begin(student->courses_list);
+            while (itCourse) {
                 Course *course = list_get(itCourse);
-                if (strcmp(course->name, name) == 0) {
+                if (strcmp(course->name, name) == 0) { //if the course already exists than we return 1 to indicate failure
                     return 1;
                 }
+                itCourse = list_next(itCourse);
             }
-            Course *new_course = init_course(name, grade);
+            //if we got here it means that the course does not exist and we can add it
+            Course *new_course = init_course(name, grade); //creating a new course template
             if (!new_course) {
                 return 1;
             }
@@ -201,26 +208,41 @@ int grades_add_grade(Grades *grades, const char *name, int id, int grade) {
             }
             return 0;
         }
+        itStudent = list_next(itStudent);
     }
     return 1;
 }
 
-float grades_calc_avg(Grades *grades, int id, char **out) {
-    if (!grades || !grades->students) {
+float grades_calc_avg(Grades *grades, int id, char **out){
+    if(!grades||!grades->students){
         *out = NULL;
         return -1;
     }
-    for (struct iterator* itStudent = list_begin(grades->students); itStudent; itStudent = list_next(itStudent)) {
+    //reach the relevant student with an iterator
+    struct iterator* itStudent = list_begin(grades->students);
+    while(itStudent){
         Student *student = list_get(itStudent);
-        if (student->id == id) {
-            int sum = 0;
-            for (struct iterator* itCourse = list_begin(student->courses_list); itCourse; itCourse = list_next(itCourse)) {
-                Course* course = list_get(itCourse);
-                sum += course->grade;
+        if(student->id == id){
+            if (!student->courses_list) { //making sure the student has courses
+                *out = NULL;
+                return -1;
             }
-            *out = strdup(student->name);
-            return (float)sum / list_size(student->courses_list);
+            int sum = 0;
+            struct iterator* itCourse = list_begin(student->courses_list); //now iterating through all the courses, summing the grades
+            while(itCourse){
+                Course* course = list_get(itStudent);
+                sum += course->grade;
+                itCourse = list_next(itCourse);
+            }
+
+            *out = (char*)malloc(strlen(student->name)+1); //allocating memory for the name of the student
+            if(*out == NULL){
+                return -1;
+            }
+            strcpy(*out, student->name); //copying the name of the student to the out variable
+            return (float)sum/list_size(student->courses_list); //returning the average
         }
+        itStudent = list_next(itStudent);
     }
     *out = NULL;
     return -1;
@@ -269,6 +291,24 @@ int grades_print_all(Grades *grades){
     }
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -366,12 +406,12 @@ int grades_print_all(Grades *grades){
 //}
 //
 //Student* init_student(const char *name, int id) {
-//    Student* student = (Student*)malloc(sizeof(Student));
-//    if (!student) {
+//    if (!name) {
+////        free(student);
 //        return NULL;
 //    }
-//    if (!name) {
-//        free(student);
+//    Student* student = (Student*)malloc(sizeof(Student));
+//    if (!student) {
 //        return NULL;
 //    }
 //    student->name = (char*)malloc(strlen(name) + 1); //should we multiply by sizeof(char)?
@@ -416,7 +456,6 @@ int grades_print_all(Grades *grades){
 //    return 0;
 //}
 //
-////####################check if typedef is problematic####################
 //typedef struct grades {
 //    struct list *students;
 //} Grades;
@@ -473,22 +512,16 @@ int grades_print_all(Grades *grades){
 //    if (!grades || !grades->students || !name || grade < 0 || grade > 100) {
 //        return 1;
 //    }
-//    struct iterator* itStudent = list_begin(grades->students);
-//    while (itStudent) {
-//        //looking for the student with the id
-//        Student *student = list_get(itStudent); //current student in the iteration
-//        if (student->id == id){
-//            //now we will iterate through the courses of the relevant student
-//            struct iterator* itCourse = list_begin(student->courses_list);
-//            while (itCourse) {
+//    for (struct iterator* itStudent = list_begin(grades->students); itStudent; itStudent = list_next(itStudent)) {
+//        Student *student = list_get(itStudent);
+//        if (student->id == id) {
+//            for (struct iterator* itCourse = list_begin(student->courses_list); itCourse; itCourse = list_next(itCourse)) {
 //                Course *course = list_get(itCourse);
-//                if (strcmp(course->name, name) == 0) { //if the course already exists than we return 1 to indicate failure
+//                if (strcmp(course->name, name) == 0) {
 //                    return 1;
 //                }
-//                itCourse = list_next(itCourse);
 //            }
-//            //if we got here it means that the course does not exist and we can add it
-//            Course *new_course = init_course(name, grade); //creating a new course template
+//            Course *new_course = init_course(name, grade);
 //            if (!new_course) {
 //                return 1;
 //            }
@@ -498,41 +531,26 @@ int grades_print_all(Grades *grades){
 //            }
 //            return 0;
 //        }
-//        itStudent = list_next(itStudent);
 //    }
 //    return 1;
 //}
 //
-//float grades_calc_avg(Grades *grades, int id, char **out){
-//    if(!grades||!grades->students){
+//float grades_calc_avg(Grades *grades, int id, char **out) {
+//    if (!grades || !grades->students) {
 //        *out = NULL;
 //        return -1;
 //    }
-//    //reach the relevant student with an iterator
-//    struct iterator* itStudent = list_begin(grades->students);
-//    while(itStudent){
+//    for (struct iterator* itStudent = list_begin(grades->students); itStudent; itStudent = list_next(itStudent)) {
 //        Student *student = list_get(itStudent);
-//        if(student->id == id){
-//            if (!student->courses_list) { //making sure the student has courses
-//                *out = NULL;
-//                return -1;
-//            }
+//        if (student->id == id) {
 //            int sum = 0;
-//            struct iterator* itCourse = list_begin(student->courses_list); //now iterating through all the courses, summing the grades
-//            while(itCourse){
-//                Course* course = list_get(itStudent);
+//            for (struct iterator* itCourse = list_begin(student->courses_list); itCourse; itCourse = list_next(itCourse)) {
+//                Course* course = list_get(itCourse);
 //                sum += course->grade;
-//                itCourse = list_next(itCourse);
 //            }
-//
-//            *out = (char*)malloc(strlen(student->name)+1); //allocating memory for the name of the student
-//            if(*out == NULL){
-//                return -1;
-//            }
-//            strcpy(*out, student->name); //copying the name of the student to the out variable
-//            return (float)sum/list_size(student->courses_list); //returning the average
+//            *out = strdup(student->name);
+//            return (float)sum / list_size(student->courses_list);
 //        }
-//        itStudent = list_next(itStudent);
 //    }
 //    *out = NULL;
 //    return -1;
