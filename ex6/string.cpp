@@ -62,7 +62,19 @@ bool String::operator==(const char *other) const{
 }
 
 //split the string according to delimiters
-//#####################need to implement in string-array.cpp and string-array.h#####################
+//#####################need to implement string-array.cpp and string-array.h#####################
+StringArray String::split(const char *delimiters) const {
+    StringArray result(0);
+    char *str = new char[length + 1];
+    strcpy(str, this->str);
+    char *token = strtok(str, delimiters);
+    while(token != nullptr){
+        result.add(make_string(token));
+        token = strtok(nullptr, delimiters);
+    }
+    delete[] str;
+    return result;
+}
 
 //convert the string into integer
 int String::to_integer() const {
