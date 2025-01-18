@@ -28,13 +28,21 @@ String::~String(){
 
 //convert a GenericString to a String, no const
 String& String::as_string() {
-    return dynamic_cast<String&>(*this);
+    auto *string = dynamic_cast<String*>(this);
+    return *string;
 }
+//String& String::as_string() {
+//    return dynamic_cast<String&>(*this);
+//}
 
 //convert a GenericString to a String, const
 const String& String::as_string() const {
-    return dynamic_cast<const String&>(*this);
+    auto *string = dynamic_cast<const String*>(this);
+    return *string;
 }
+//const String& String::as_string() const {
+//    return dynamic_cast<const String&>(*this);
+//}
 
 //operator=
 String& String::operator=(const char *str){
