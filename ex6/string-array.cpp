@@ -1,5 +1,5 @@
-#include "string_array.h"
-#include "generic_string.h"
+#include "string-array.h"
+#include "generic-string.h"
 #include <cstring>
 #include <cstdlib>
 
