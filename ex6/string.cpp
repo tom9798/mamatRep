@@ -26,21 +26,16 @@ String::~String(){
     delete[] this->str;
 }
 
-//convert a GenericString to a String, no const
-String& String::as_string() {
-    return *this;
+//convert a GenericString to a String, no const, and return a reference
+String& String::as_string(){
+    return dynamic_cast<String&>(*this);
 }
-//String& String::as_string() {
-//    return dynamic_cast<String&>(*this);
-//}
+
 
 //convert a GenericString to a String, const
 const String& String::as_string() const {
-    return *this;
+    return dynamic_cast<const String&>(*this);
 }
-//const String& String::as_string() const {
-//    return dynamic_cast<const String&>(*this);
-//}
 
 //operator=
 String& String::operator=(const char *str){
