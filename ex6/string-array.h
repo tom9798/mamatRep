@@ -3,7 +3,7 @@
 
 
 #include "generic-string.h"
-#inlcude "string.h"
+#include "string.h"
 
 //this class will maintain an array of GenericString object pointers, made up of the words in the original string
 class StringArray {

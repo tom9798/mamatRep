@@ -76,14 +76,14 @@ StringArray String::split(const char *delimiters) const {
 
     while(token != nullptr){ //count the number of words
         array->size += 1;
-        token = strtok(nullptr, delimiters);
+        token = strtok(nullptr, delimiters); //get the next token
     }
     array->array = new GenericString*[array->size]; //allocate memory for the array of GenericString objects
 
     token = strtok(this->str, delimiters); //start iterating over the string again to add the tokens to the array
     for(int i = 0; i < array->size; i++){
-        array->array[i] = make_string(token);
-        token = strtok(nullptr, delimiters);
+        array->array[i] = make_string(token); //add the token to the array
+        token = strtok(nullptr, delimiters); //get the next token
     }
 
     delete[] copy; //clean up
@@ -97,6 +97,8 @@ int String::to_integer() const {
 }
 
 //remove leading and trailing white spaces
+//we first set indexes to note were the actual string starts and ends,
+//and then we allocate memory for the new string and copy the string
 String &String::trim(){
     //check if the string is empty
     int start = 0;
