@@ -134,12 +134,10 @@ String &String::trim(){
         return *this;
     }
     //if there are white spaces
-//    this -> length = end - start + 1;
-    int new_length = end - start + 1;
-    char *new_str = allocate_and_copy(this->str + start, new_length);
+    this -> length = end - start + 1;
+    char *new_str = allocate_and_copy(this->str + start, 2);
     delete[] this->str;
     this->str = new_str;
-    this->length = new_length;
 
     return *this;
 }
