@@ -26,6 +26,11 @@ String::~String(){
     delete[] this->str;
 }
 
+//make_string function
+GenericString GenericString::make_string(const char *str){
+    return String(str);
+}
+
 //convert a GenericString to a String, no const, and return a reference
 String& String::as_string(){
     return dynamic_cast<String&>(*this);
