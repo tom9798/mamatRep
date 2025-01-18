@@ -106,15 +106,19 @@ int String::to_integer() const {
 //we first set indexes to note were the actual string starts and ends,
 //and then we allocate memory for the new string and copy the string
 String &String::trim(){
+    if (this->length == 0){
+        return *this;
+    }
+
     //check if the string is empty
     int start = 0;
-    int end = length - 1;
+    int end = this->length - 1;
     //first setting the index to remove leading white spaces
-    while(start < length && (this->str[start] == ' ' || this->str[start] == '\t')){ //check if it's a white space or a tab
+    while(start < this->length && (this->str[start] == ' ' || this->str[start] == '\t')){ //check if it's a white space or a tab
         start++;
     }
     //then setting the index to remove trailing white spaces
-    while(end >= 0 && (this->str[end] == ' ' || this->str[end] == '\t')){ //check if it's a white space or a tab
+    while(end >= start && (this->str[end] == ' ' || this->str[end] == '\t')){ //check if it's a white space or a tab
         end--;
     }
     //if the string is empty, meaning it's all white spaces
@@ -122,7 +126,7 @@ String &String::trim(){
         delete[] this->str;
         this->str = new char[1];
         this->str[0] = '\0';
-        length = 0;
+        this->length = 0;
         return *this;
     }
     //if there are no white spaces
@@ -130,10 +134,12 @@ String &String::trim(){
         return *this;
     }
     //if there are white spaces
-    this -> length = end - start + 1;
-    char *new_str = allocate_and_copy(this->str + start, this->length);
+//    this -> length = end - start + 1;
+    int new_length = end - start + 1;
+    char *new_str = allocate_and_copy(this->str + start, new_length);
     delete[] this->str;
     this->str = new_str;
+    this->length = new_length;
 
     return *this;
 }
