@@ -2,7 +2,7 @@
 #define STRINGARRAY_H
 
 
-#include "generic-string.h"
+//#include "generic-string.h"
 #include "string.h"
 
 //this class will maintain an array of GenericString object pointers, made up of the words in the original string
