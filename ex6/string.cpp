@@ -27,8 +27,8 @@ String::~String(){
 }
 
 //make_string function
-GenericString GenericString::make_string(const char *str){
-    return String(str);
+GenericString* make_string(const char *str){
+    return new String(str);
 }
 
 //convert a GenericString to a String, no const, and return a reference
