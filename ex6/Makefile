@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -fPIC -std=c++11
 
 # Source files
-SRCS = string.cpp string-array.cpp main.cpp
+SRCS = string.cpp string-array.cpp main.cpp generic-string.h string-array.h string.h
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
