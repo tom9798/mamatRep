@@ -1,8 +1,8 @@
 # Compiler
-CC = gcc
+CXX = g++
 
 # Compiler flags
-CFLAGS = -O2 -Wall -fPIC -std=c99
+CXXFLAGS = -O2 -Wall -fPIC -std=c++11
 
 # Source files
 SRCS = string.cpp string-array.cpp main.cpp
@@ -21,11 +21,11 @@ all: $(TARGET)
 
 # Link object files to create the executable
 $(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS)
+	$(CXX) -o $(TARGET) $(OBJS)
 
 # Compile source files into object files
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean up build files
 clean:
