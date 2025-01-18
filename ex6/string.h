@@ -20,6 +20,10 @@ public:
     String& trim(); // remove leading and trailing white spaces
     String& as_string(); // return the string as a String object
     const String& as_string() const; // return the string as a String object
+
+    //just for testing, implement getters
+    char* get_str() const;
+    int get_length() const;
 };
 
 #endif // STRING_H

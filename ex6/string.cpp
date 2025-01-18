@@ -137,3 +137,12 @@ String &String::trim(){
 
     return *this;
 }
+
+
+//just for testing, implement getters
+char* String::get_str() const{
+    return this->str;
+}
+int String::get_length() const{
+    return this->length;
+}
