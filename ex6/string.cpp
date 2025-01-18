@@ -6,7 +6,7 @@
 
 //allocate memory and copy the string
 char* String::allocate_and_copy(const char *str, int size) {
-    return strcpy(new char[size + 1], str);
+    return strncpy(new char[size + 1], str, size);
 }
 
 //constructor
@@ -135,7 +135,7 @@ String &String::trim(){
     }
     //if there are white spaces
     this -> length = end - start + 1;
-    char *new_str = allocate_and_copy(this->str + start, 2);
+    char *new_str = allocate_and_copy(this->str + start, this->length);
     delete[] this->str;
     this->str = new_str;
 
