@@ -26,7 +26,7 @@ int main() {
     std::cout << "str4 as integer: " << str4.to_integer() << std::endl;
 
     // Test trim
-    String str5("   Trim me!   ");
+    String str5("   Trim me!   "); //#####################need to fix###################
     str5.trim();
     std::cout << "str5 (after trim): \"" << str5.get_str() << "\"" << std::endl;
 

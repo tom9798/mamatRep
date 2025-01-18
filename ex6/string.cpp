@@ -131,7 +131,7 @@ String &String::trim(){
     }
     //if there are white spaces
     this -> length = end - start + 1;
-    char *new_str = allocate_and_copy(this->str + start, end - start + 1);
+    char *new_str = allocate_and_copy(this->str + start, this->length);
     delete[] this->str;
     this->str = new_str;
 
