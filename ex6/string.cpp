@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 //allocate memory and copy the string
-static char* String::allocate_and_copy(const char *str, int size) {
+char* String::allocate_and_copy(const char *str, int size) {
     return strcpy(new char[size + 1], str);
 }
 

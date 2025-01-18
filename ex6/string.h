@@ -17,8 +17,8 @@ public:
     bool operator==(const char *other) const; // operator==
     StringArray split(const char *delimiters) const; // split the string according to delimiters
     int to_integer() const; // convert the string to integer
-    String &trim(); // remove leading and trailing white spaces
-    String &as_string(); // return the string as a String object
+    String& trim(); // remove leading and trailing white spaces
+    String& as_string(); // return the string as a String object
 };
 
 #endif // STRING_H

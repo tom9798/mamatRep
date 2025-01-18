@@ -7,9 +7,9 @@
 
 //this class will maintain an array of GenericString object pointers, made up of the words in the original string
 class StringArray {
+public:
     int size;
     GenericString **array;
-public:
     StringArray(); // constructor
     StringArray(const StringArray &other); // copy constructor
     ~StringArray(); // destructor
