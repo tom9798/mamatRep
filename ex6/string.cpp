@@ -28,8 +28,7 @@ String::~String(){
 
 //convert a GenericString to a String, no const
 String& String::as_string() {
-    auto *string = dynamic_cast<String*>(this);
-    return *string;
+    return *this;
 }
 //String& String::as_string() {
 //    return dynamic_cast<String&>(*this);
@@ -37,8 +36,7 @@ String& String::as_string() {
 
 //convert a GenericString to a String, const
 const String& String::as_string() const {
-    auto *string = dynamic_cast<const String*>(this);
-    return *string;
+    return *this;
 }
 //const String& String::as_string() const {
 //    return dynamic_cast<const String&>(*this);
