@@ -1,4 +1,6 @@
 #include "string.h"
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
 
 int main() {
