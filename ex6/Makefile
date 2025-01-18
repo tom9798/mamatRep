@@ -2,10 +2,10 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -O2 -Wall -fPIC -std=c++11
+CXXFLAGS = -Wall -fPIC -std=c++11
 
 # Source files
-SRCS = string.cpp string-array.cpp main.cpp
+SRCS = string.cpp string-array.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
