@@ -38,6 +38,14 @@ int main() {
         std::cout << "  " << array.array[i]->as_string().get_str() << std::endl;
     }
 
+    // Test split with multiple delimiters
+    String str7("split,this,string too");
+    StringArray array2 = str7.split(", ");
+    std::cout << "str7 split by ', ':" << std::endl;
+    for (size_t i = 0; i < array2.size; ++i) {
+        std::cout << "  " << array2.array[i]->as_string().get_str() << std::endl;
+    }
+
     // Clean up
     for (size_t i = 0; i < array.size; ++i) {
         delete array.array[i];
