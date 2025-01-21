@@ -364,17 +364,17 @@ Disassembly of section .text:
     1505:	3e ff e0             	notrack jmpq *%rax
     1508:	e8 59 05 00 00       	callq  1a66 <explode_bomb>
     150d:	eb db                	jmp    14ea <phase_3+0x31>
-    150f:	b8 71 01 00 00       	mov    $0x171,%eax
-    1514:	2d bc 00 00 00       	sub    $0xbc,%eax
-    1519:	05 79 02 00 00       	add    $0x279,%eax
-    151e:	83 e8 41             	sub    $0x41,%eax
-    1521:	83 c0 41             	add    $0x41,%eax
-    1524:	83 e8 41             	sub    $0x41,%eax
-    1527:	83 c0 41             	add    $0x41,%eax
-    152a:	83 e8 41             	sub    $0x41,%eax
-    152d:	83 3c 24 05          	cmpl   $0x5,(%rsp)
+    150f:	b8 71 01 00 00       	mov    $0x171,%eax //+369
+    1514:	2d bc 00 00 00       	sub    $0xbc,%eax //-188
+    1519:	05 79 02 00 00       	add    $0x279,%eax //+633
+    151e:	83 e8 41             	sub    $0x41,%eax //-65
+    1521:	83 c0 41             	add    $0x41,%eax //+65
+    1524:	83 e8 41             	sub    $0x41,%eax //-65
+    1527:	83 c0 41             	add    $0x41,%eax //+65
+    152a:	83 e8 41             	sub    $0x41,%eax //-65
+    152d:	83 3c 24 05          	cmpl   $0x5,(%rsp)  //if the index is bigger than 5, bomb
     1531:	7f 06                	jg     1539 <phase_3+0x80>
-    1533:	39 44 24 04          	cmp    %eax,0x4(%rsp)
+    1533:	39 44 24 04          	cmp    %eax,0x4(%rsp) //compare the value in the array with the calculated value
     1537:	74 05                	je     153e <phase_3+0x85>
     1539:	e8 28 05 00 00       	callq  1a66 <explode_bomb>
     153e:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
