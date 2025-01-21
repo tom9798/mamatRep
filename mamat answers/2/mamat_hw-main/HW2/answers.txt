@@ -1,0 +1,18 @@
+Q1
+in all the C programs (excluding hist.c) we have duplicate code.
+1. according to the instructions, in each such program,
+we tested the arguments in the same way (num of arguments, the argument "-").
+we could have done it in different generic program and then in each file,
+instead of writing the same long code, just run the generic program at the
+beginning of each file.
+2. the only different between the min and max programs is only the <=/>=.
+we could have used the same program and calculate them both, and "returning"
+at the end (using fprintf(stdout, ..) according to the
+argument the user enters. for example, we could name this program
+"min_or_max.c" and the bash line would be "./min_or_max.exe min".
+3. in each program we tested the input line by line
+(checking scanf succession, valid garde, ect).
+instead we could have written a separate program which
+runs the relevant tests. if one of the tests fails, it'll print the relevant
+error and exit the main program.
+

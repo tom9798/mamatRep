@@ -1,0 +1,28 @@
+
+Q1
+we approximate that the task would have taken about 2 hours without the script.
+It based on our estimation that checking each article would take about two 
+minutes (entering the article and using Ctrl+F).
+
+Q2
+b. We can see that by using Bash we can pull any format of words or data 
+from any website, fast and easy. by using this method, we learned we 
+can find a few uses like:
+1. collecting data and information about specific companies.
+2. search engine within a site
+3. collecting data for AI algorithm dataset
+For example, Maccabi TA fans claim that although their team is very good, 
+the press ignores the team and don't covers them as much as other 
+teams in the league.
+By colleting data about articles from sites like Spors5 and One, 
+we can examine their claim and confirm or disprove it. 
+
+Q3
+We can repeat the process by running our scrape_news script every hour.
+To automate it, We would write a script that runs our script every hour 
+using a counter.
+If we wanted to save ourselves the time to repeat scanned articles, 
+we can make a "scanned articles urls" txt file,
+and search for each article url there before we scan it over.
+
+
