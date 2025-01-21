@@ -6,13 +6,16 @@
 #0 0
 
 #run a loop to check if the output contains 'BOOM!', if it does, add 1 to the second number in the third line of the solution file and run the vault program again
+#!/bin/bash
+
+# Run a loop to check if the output contains 'BOOM!', if it does, add 1 to the second number in the third line of the solution file and run the vault program again
 while true; do
   # Run the vault program with solution.txt as an argument
   output=$(./vault solution.txt)
   # Check if the output contains 'BOOM!'
   if echo "$output" | grep -q 'BOOM!'; then
     # Adding 1 to the second number in the third line of the solution file
-    sed -i '3s/\([0-9]* \)\([0-9]*\)/\1$((\2+1))/' solution.txt
+    awk 'NR==3 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
   else
     break
   fi
