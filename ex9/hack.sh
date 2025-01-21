@@ -14,6 +14,7 @@ while true; do
   output=$(./vault solution.txt)
   # Check if the output contains 'BOOM!'
   if echo "$output" | grep -q 'BOOM!'; then
+    echo "$output" | grep -q 'BOOM!'
     # Adding 1 to the second number in the third line of the solution file
     awk 'NR==3 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
     #print the third line of the solution file
