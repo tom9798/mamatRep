@@ -18,6 +18,8 @@ while true; do
     awk 'NR==3 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
     #print the third line of the solution file
     sed -n '3p' solution.txt
+    #print the output
+    echo "$output"
   else
     echo "$output"
     break
