@@ -17,6 +17,7 @@ while true; do
     # Adding 1 to the second number in the third line of the solution file
     awk 'NR==3 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
   else
+    echo "$output"
     break
   fi
 done
