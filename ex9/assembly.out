@@ -470,28 +470,28 @@ Disassembly of section .text:
     165b:	31 c0                	xor    %eax,%eax
     165d:	48 8d 4c 24 04       	lea    0x4(%rsp),%rcx
     1662:	48 89 e2             	mov    %rsp,%rdx
-    1665:	48 8d 35 90 0c 00 00 	lea    0xc90(%rip),%rsi        # 22fc <array.3469+0x13c>
+    1665:	48 8d 35 90 0c 00 00 	lea    0xc90(%rip),%rsi        # 22fc <array.3469+0x13c> //scan the input into an array with two integers
     166c:	e8 0f fb ff ff       	callq  1180 <__isoc99_sscanf@plt>
-    1671:	83 f8 01             	cmp    $0x1,%eax //making sure scanf was successful
+    1671:	83 f8 01             	cmp    $0x1,%eax //making sure sscanf read more than 1 integer
     1674:	7e 5a                	jle    16d0 <phase_5+0x8b>
     1676:	8b 04 24             	mov    (%rsp),%eax //moving the first integer into eax
     1679:	83 e0 0f             	and    $0xf,%eax //masking the last 4 bits of the first integer
     167c:	89 04 24             	mov    %eax,(%rsp) //moving the masked value back into the array
     167f:	83 f8 0f             	cmp    $0xf,%eax //if the masked value is 0xf, bomb
     1682:	74 32                	je     16b6 <phase_5+0x71>
-    1684:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1689:	ba 00 00 00 00       	mov    $0x0,%edx
-    168e:	48 8d 35 2b 0b 00 00 	lea    0xb2b(%rip),%rsi        # 21c0 <array.3469> //the array is [10,2]
-    1695:	83 c2 01             	add    $0x1,%edx
+    1684:	b9 00 00 00 00       	mov    $0x0,%ecx //sum = 0
+    1689:	ba 00 00 00 00       	mov    $0x0,%edx //counter = 0
+    168e:	48 8d 35 2b 0b 00 00 	lea    0xb2b(%rip),%rsi        # 21c0 <array.3469> //the array is [10, 2, 14, 7, 8, 12, 15, 11, 0, 4, 1, 13, 3, 9, 6, 5]
+    1695:	83 c2 01             	add    $0x1,%edx //increment the counter
     1698:	48 98                	cltq   
-    169a:	8b 04 86             	mov    (%rsi,%rax,4),%eax
-    169d:	01 c1                	add    %eax,%ecx
-    169f:	83 f8 0f             	cmp    $0xf,%eax
+    169a:	8b 04 86             	mov    (%rsi,%rax,4),%eax // eax = rsi[rax]
+    169d:	01 c1                	add    %eax,%ecx //counter += num1%16
+    169f:	83 f8 0f             	cmp    $0xf,%eax //while loop until num1%16 == 15
     16a2:	75 f1                	jne    1695 <phase_5+0x50>
     16a4:	c7 04 24 0f 00 00 00 	movl   $0xf,(%rsp)
-    16ab:	83 fa 0f             	cmp    $0xf,%edx
+    16ab:	83 fa 0f             	cmp    $0xf,%edx //check if the counter is 15, if it isn't, bomb
     16ae:	75 06                	jne    16b6 <phase_5+0x71>
-    16b0:	39 4c 24 04          	cmp    %ecx,0x4(%rsp)
+    16b0:	39 4c 24 04          	cmp    %ecx,0x4(%rsp) // compare the sum with the second integer, if they are not equal, bomb
     16b4:	74 05                	je     16bb <phase_5+0x76>
     16b6:	e8 ab 03 00 00       	callq  1a66 <explode_bomb>
     16bb:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
