@@ -8,8 +8,8 @@ while true; do
   echo "Output: $output"
   # Check if the output contains 'BOOM!'
   if echo "$output" | grep -q 'BOOM!'; then
-    # Adding 1 to the second number in the third line of the solution file
-    awk 'NR==3 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
+    # Adding 1 to the second number in the fourth line of the solution file
+    awk 'NR==4 {$2=$2+1}1' solution.txt > temp.txt && mv temp.txt solution.txt
     # Print the updated third line for debugging
     echo "Updated line: $(awk 'NR==3' solution.txt)"
   else

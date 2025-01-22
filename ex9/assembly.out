@@ -403,57 +403,57 @@ Disassembly of section .text:
     1590:	e8 9b fb ff ff       	callq  1130 <__stack_chk_fail@plt>
 
 0000000000001595 <func4>:
-    1595:	f3 0f 1e fa          	endbr64 
-    1599:	b8 00 00 00 00       	mov    $0x0,%eax
-    159e:	85 ff                	test   %edi,%edi
+    1595:	f3 0f 1e fa          	endbr64 //edi == x, esi == y, eax == out
+    1599:	b8 00 00 00 00       	mov    $0x0,%eax // out = 0
+    159e:	85 ff                	test   %edi,%edi // if x <= 0, return out = 0
     15a0:	7e 2d                	jle    15cf <func4+0x3a>
     15a2:	41 54                	push   %r12
     15a4:	55                   	push   %rbp
     15a5:	53                   	push   %rbx
-    15a6:	89 fb                	mov    %edi,%ebx
-    15a8:	89 f5                	mov    %esi,%ebp
-    15aa:	89 f0                	mov    %esi,%eax
-    15ac:	83 ff 01             	cmp    $0x1,%edi
+    15a6:	89 fb                	mov    %edi,%ebx //tmp1 = x
+    15a8:	89 f5                	mov    %esi,%ebp //tmp2 = y
+    15aa:	89 f0                	mov    %esi,%eax //out = y
+    15ac:	83 ff 01             	cmp    $0x1,%edi //if x == 1, return out = y
     15af:	74 19                	je     15ca <func4+0x35>
-    15b1:	8d 7f ff             	lea    -0x1(%rdi),%edi
-    15b4:	e8 dc ff ff ff       	callq  1595 <func4>
-    15b9:	44 8d 24 28          	lea    (%rax,%rbp,1),%r12d
-    15bd:	8d 7b fe             	lea    -0x2(%rbx),%edi
-    15c0:	89 ee                	mov    %ebp,%esi
-    15c2:	e8 ce ff ff ff       	callq  1595 <func4>
-    15c7:	44 01 e0             	add    %r12d,%eax
+    15b1:	8d 7f ff             	lea    -0x1(%rdi),%edi //x = x - 1
+    15b4:	e8 dc ff ff ff       	callq  1595 <func4> //out = func4(x-1, y)
+    15b9:	44 8d 24 28          	lea    (%rax,%rbp,1),%r12d //r12 = out + tmp2 = out + y
+    15bd:	8d 7b fe             	lea    -0x2(%rbx),%edi //x = tmp1 - 2
+    15c0:	89 ee                	mov    %ebp,%esi //y = tmp2
+    15c2:	e8 ce ff ff ff       	callq  1595 <func4> //func4(x-2, y)
+    15c7:	44 01 e0             	add    %r12d,%eax //out = out + y
     15ca:	5b                   	pop    %rbx
     15cb:	5d                   	pop    %rbp
     15cc:	41 5c                	pop    %r12
-    15ce:	c3                   	retq   
+    15ce:	c3                   	retq
     15cf:	c3                   	retq   
 
 00000000000015d0 <phase_4>:
     15d0:	f3 0f 1e fa          	endbr64 
-    15d4:	48 83 ec 18          	sub    $0x18,%rsp
-    15d8:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    15d4:	48 83 ec 18          	sub    $0x18,%rsp //allocate 24 bytes
+    15d8:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax //store the value of fs:0x28 in rax
     15df:	00 00 
-    15e1:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-    15e6:	31 c0                	xor    %eax,%eax
-    15e8:	48 89 e1             	mov    %rsp,%rcx
-    15eb:	48 8d 54 24 04       	lea    0x4(%rsp),%rdx
-    15f0:	48 8d 35 05 0d 00 00 	lea    0xd05(%rip),%rsi        # 22fc <array.3469+0x13c>
-    15f7:	e8 84 fb ff ff       	callq  1180 <__isoc99_sscanf@plt>
-    15fc:	83 f8 02             	cmp    $0x2,%eax
+    15e1:	48 89 44 24 08       	mov    %rax,0x8(%rsp) //store the value of rax in 0x8(%rsp)
+    15e6:	31 c0                	xor    %eax,%eax //eax = 0
+    15e8:	48 89 e1             	mov    %rsp,%rcx //rcx = rsp
+    15eb:	48 8d 54 24 04       	lea    0x4(%rsp),%rdx //rdx = rsp + 4
+    15f0:	48 8d 35 05 0d 00 00 	lea    0xd05(%rip),%rsi        # 22fc <array.3469+0x13c> //rsi = array
+    15f7:	e8 84 fb ff ff       	callq  1180 <__isoc99_sscanf@plt>  //scanf(input, "%d %d", array)
+    15fc:	83 f8 02             	cmp    $0x2,%eax //if eax != 2, bomb
     15ff:	75 0b                	jne    160c <phase_4+0x3c>
-    1601:	8b 04 24             	mov    (%rsp),%eax
-    1604:	83 e8 02             	sub    $0x2,%eax
-    1607:	83 f8 02             	cmp    $0x2,%eax
+    1601:	8b 04 24             	mov    (%rsp),%eax //eax = array[0], we choose eax since it's an int
+    1604:	83 e8 02             	sub    $0x2,%eax //eax = eax - 2
+    1607:	83 f8 02             	cmp    $0x2,%eax //if eax > 2, bomb
     160a:	76 05                	jbe    1611 <phase_4+0x41>
     160c:	e8 55 04 00 00       	callq  1a66 <explode_bomb>
-    1611:	8b 34 24             	mov    (%rsp),%esi
-    1614:	bf 07 00 00 00       	mov    $0x7,%edi
+    1611:	8b 34 24             	mov    (%rsp),%esi //esi = array[0]
+    1614:	bf 07 00 00 00       	mov    $0x7,%edi //edi = 7
     1619:	e8 77 ff ff ff       	callq  1595 <func4>
     161e:	39 44 24 04          	cmp    %eax,0x4(%rsp)
     1622:	75 15                	jne    1639 <phase_4+0x69>
     1624:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
     1629:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
-    1630:	00 00 
+    1630:	00 00
     1632:	75 0c                	jne    1640 <phase_4+0x70>
     1634:	48 83 c4 18          	add    $0x18,%rsp
     1638:	c3                   	retq   
