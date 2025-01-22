@@ -474,10 +474,10 @@ Disassembly of section .text:
     166c:	e8 0f fb ff ff       	callq  1180 <__isoc99_sscanf@plt>
     1671:	83 f8 01             	cmp    $0x1,%eax
     1674:	7e 5a                	jle    16d0 <phase_5+0x8b>
-    1676:	8b 04 24             	mov    (%rsp),%eax
-    1679:	83 e0 0f             	and    $0xf,%eax
-    167c:	89 04 24             	mov    %eax,(%rsp)
-    167f:	83 f8 0f             	cmp    $0xf,%eax
+    1676:	8b 04 24             	mov    (%rsp),%eax //moving an integer into eax, probably the last element of the array
+    1679:	83 e0 0f             	and    $0xf,%eax //masking the last 4 bits of eax
+    167c:	89 04 24             	mov    %eax,(%rsp) //moving the masked value back into the array
+    167f:	83 f8 0f             	cmp    $0xf,%eax //if the masked value is 0xf, bomb
     1682:	74 32                	je     16b6 <phase_5+0x71>
     1684:	b9 00 00 00 00       	mov    $0x0,%ecx
     1689:	ba 00 00 00 00       	mov    $0x0,%edx
