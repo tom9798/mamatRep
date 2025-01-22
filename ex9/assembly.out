@@ -441,7 +441,7 @@ Disassembly of section .text:
     15f7:	e8 84 fb ff ff       	callq  1180 <__isoc99_sscanf@plt>  //scanf(input, "%d %d", array)
     15fc:	83 f8 02             	cmp    $0x2,%eax //if eax != 2, bomb
     15ff:	75 0b                	jne    160c <phase_4+0x3c>
-    1601:	8b 04 24             	mov    (%rsp),%eax //eax = array[0], we choose eax since it's an int
+    1601:	8b 04 24             	mov    (%rsp),%eax //eax = array[1], we choose eax since it's an int
     1604:	83 e8 02             	sub    $0x2,%eax //eax = eax - 2
     1607:	83 f8 02             	cmp    $0x2,%eax //if eax > 2, bomb. that means that we want to check if array[0] is in [2, 3]
     160a:	76 05                	jbe    1611 <phase_4+0x41>
@@ -449,7 +449,7 @@ Disassembly of section .text:
     1611:	8b 34 24             	mov    (%rsp),%esi //esi = array[1]
     1614:	bf 07 00 00 00       	mov    $0x7,%edi //edi = 7
     1619:	e8 77 ff ff ff       	callq  1595 <func4>
-    161e:	39 44 24 04          	cmp    %eax,0x4(%rsp)
+    161e:	39 44 24 04          	cmp    %eax,0x4(%rsp) //compare the result of func4 with array[0]
     1622:	75 15                	jne    1639 <phase_4+0x69>
     1624:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
     1629:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
