@@ -443,10 +443,10 @@ Disassembly of section .text:
     15ff:	75 0b                	jne    160c <phase_4+0x3c>
     1601:	8b 04 24             	mov    (%rsp),%eax //eax = array[0], we choose eax since it's an int
     1604:	83 e8 02             	sub    $0x2,%eax //eax = eax - 2
-    1607:	83 f8 02             	cmp    $0x2,%eax //if eax > 2, bomb
+    1607:	83 f8 02             	cmp    $0x2,%eax //if eax > 2, bomb. that means that we want to check if array[0] is in [2, 3]
     160a:	76 05                	jbe    1611 <phase_4+0x41>
     160c:	e8 55 04 00 00       	callq  1a66 <explode_bomb>
-    1611:	8b 34 24             	mov    (%rsp),%esi //esi = array[0]
+    1611:	8b 34 24             	mov    (%rsp),%esi //esi = array[1]
     1614:	bf 07 00 00 00       	mov    $0x7,%edi //edi = 7
     1619:	e8 77 ff ff ff       	callq  1595 <func4>
     161e:	39 44 24 04          	cmp    %eax,0x4(%rsp)
