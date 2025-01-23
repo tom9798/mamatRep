@@ -14,21 +14,21 @@ int main(int argc, char **argv) {
     String input(argv[1]);
     StringArray rule = input.split("=");
 
-    if (rule.getSize() < 2) {
+    if (rule.size < 2) {
         std::cerr << "Invalid input format: " << std::endl;
         return 1;
     }
 
-    String name = rule[0].trim().as_string();
-    String val = rule[1].trim().as_string();
+    String name = rule.array[0].trim().as_string();
+    String val = rule.array[1].trim().as_string();
 
     if (name == "src-ip" || name == "dst-ip") {
-        ip main_ip(name);
+        Ip main_ip(name);
         main_ip.set_value(val);
         parse_input(main_ip);
     }
     else if (name == "src-port" || name == "dst-port") {
-        port main_port(name);
+        Port main_port(name);
         main_port.set_value(val);
         parse_input(main_port);
     }
