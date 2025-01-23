@@ -16,7 +16,7 @@ public:
 //    Ip(const Ip &other); //copy constructor
 
     void get_rule(GenericString &rule);
-    bool match(GenericString &packet) override;
+    bool match(const GenericString &packet) const;
 };
 
 #endif // IP_H
