@@ -17,20 +17,36 @@ Ip::~Ip() {}
 
 void Ip::get_rule(GenericString &rule){
 //    StringArray fields = rule.split(",");
-    String ip_str;
+//    String ip_str;
+//    String ip_str;
+//    unsigned int ip_mask;
+//    for (size_t i = 0; i < fields.size; ++i) {
+//        StringArray key_value = fields.array[i]->as_string().split("=");
+//        String key = key_value.array[0]->as_string();
+//        String value = key_value.array[1]->as_string();
+//        if (key == "src-ip" || key == "dst-ip") {
+//            if (key == "dst-ip") {
+//                dst = true;
+//            }
+//            StringArray ip_mask = value.split("/"); //splitting the value into the IP and the rule
+//            ip_str = ip_mask.array[0]->as_string();
+//            ip_mask = ip_mask.array[1]->as_string().to_integer();
+//        }
+//    }
+    //no need to split the rule
+    String ip_str("");
     unsigned int ip_mask;
-    for (size_t i = 0; i < fields.size; ++i) {
-        StringArray key_value = fields.array[i]->as_string().split("=");
-        String key = key_value.array[0]->as_string();
-        String value = key_value.array[1]->as_string();
-        if (key == "src-ip" || key == "dst-ip") {
-            if (key == "dst-ip") {
-                dst = true;
-            }
-            StringArray ip_mask = value.split("/"); //splitting the value into the IP and the rule
-            ip_str = ip_mask.array[0]->as_string();
-            ip_mask = ip_mask.array[1]->as_string().to_integer();
+    StringArray key_value = rule.split("=");
+    String key = key_value.array[0]->as_string();
+    String value = key_value.array[1]->as_string();
+    if (key == "src-ip" || key == "dst-ip") {
+        if (key == "dst-ip") {
+            dst = true;
         }
+        StringArray ipRule = value.split("/"); //splitting the value into the IP and the rule
+//        ip_str = ip_mask.array[0]->as_string();
+        ip_str = ipRule.array[0]->as_string().str;
+        ip_mask = ipRule.array[1]->as_string().to_integer();
     }
 
     //converting the IP to binary
@@ -38,7 +54,7 @@ void Ip::get_rule(GenericString &rule){
     std::bitset<32> ip_bits;
     for (size_t i = 0; i < octets.size; ++i) {
         std::bitset<8> octet_bits(octets.array[i]->as_string().to_integer());
-        ip_bit |= (octet_bits << (8 * (3 - i)));
+        ip_bits |= (octet_bits << (8 * (3 - i)));
     }
     this->ip = ip_bits;
 
