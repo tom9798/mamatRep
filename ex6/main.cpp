@@ -24,11 +24,13 @@ int main(int argc, char **argv) {
 //    String val = rule.array[1].trim().as_string();
 
     if (name == "src-ip" || name == "dst-ip") {
-        Ip main_ip(name);
+        Ip main_ip;
+        main_ip.ip = name;
         parse_input(main_ip);
     }
     else if (name == "src-port" || name == "dst-port") {
-        Port main_port(name);
+        Port main_port;
+        main_port.port = name;
         parse_input(main_port);
     }
     return 0;
