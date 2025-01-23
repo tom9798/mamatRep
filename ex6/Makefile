@@ -1,32 +1,29 @@
-# Compiler
-CXX = g++
+CXX=g++
+CXXLINK=$(CXX)
+CXXFLAGS= -g -Wall -std=c++11
+OBJS= string.o ip.o port.o string-array.o
+RM= rm -rf
 
-# Compiler flags
-CXXFLAGS = -Wall -fPIC -std=c++11
+firewall.exe: main.o libfirewall.so
+	$(CXXLINK) $(CXXFLAGS) main.o -o firewall.exe -lfirewall -linput -L.
 
-# Source files
-SRCS = string.cpp string-array.cpp main.cpp
+libfirewall.so: $(OBJS)
+	$(CXXLINK) -shared $(OBJS) -o libfirewall.so
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+string.o: string.h string.cpp generic-string.h
+	$(CXXLINK) $(CXXFLAGS) -c -fpic string.cpp
 
-# Executable name
-TARGET = my_program
+string-array.o: string-array.h string-array.cpp string.h generic-string.h
+	$(CXXLINK) $(CXXFLAGS) -c -fpic string-array.cpp
 
-# Clean command
-RM = rm -f
+ip.o: ip.h ip.cpp string.h string-array.h generic-field.h
+	$(CXXLINK) $(CXXFLAGS) -c -fpic ip.cpp
 
-# Default target
-all: $(TARGET)
+port.o: port.h port.cpp string.h string-array.h generic-field.h
+	$(CXXLINK) $(CXXFLAGS) -c -fpic port.cpp
 
-# Link object files to create the executable
-$(TARGET): $(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS)
+main.o: main.cpp string.h string-array.h ip.h port.h input.h generic-string.h generic-field.h
+	$(CXXLINK) $(CXXFLAGS) -c -fpic main.cpp
 
-# Compile source files into object files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Clean up build files
 clean:
-	$(RM) $(OBJS) $(TARGET)
+	$(RM) *.o
