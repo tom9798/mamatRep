@@ -1,23 +1,22 @@
-#ifndef IP_H
-#define IP_H
-
 #include "generic-field.h"
+#include "generic-string.h"
+#include "string-array.h"
 #include "string.h"
+#include <iostream>
+#include <bitset>
+using std::bitset;
 
-class Ip : public GenericField {
-    int mask;
-    unsigned int ip;
+class Ip : public GenericField{
+private:
     bool dst;
-//    String ip_str;
+    unsigned int ip;
+    int mask_ip;
 
 public:
+    Ip();
 
-    Ip(); //constructor
-    ~Ip(); //destructor
-//    Ip(const Ip &other); //copy constructor
+    ~Ip();
 
     void get_rule(GenericString &rule);
-    bool match(GenericString &packet);
+    bool match(const GenericString &packet) const;
 };
-
-#endif // IP_H

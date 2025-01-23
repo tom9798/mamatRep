@@ -1,7 +1,4 @@
-#include "generic-string.h"
-#include "string-array.h"
 #include "string.h"
-#include <cstring>
 #include <cstdlib>
 
 //allocate memory and copy the string
@@ -10,101 +7,75 @@ char* String::allocate_and_copy(const char *str, int size) {
 }
 
 //constructor
-String::String(const char *str) {
+String::String(const char *str){
+//    this->str = new char[strlen(str) + 1];
+//    strcpy(this->str,str);
     this->length = strlen(str);
-    this->str = allocate_and_copy(str, length);
+    this->str = allocate_and_copy(str, strlen(str));
 }
 
 //copy constructor
 String::String(const String &other){
-    length = other.length;
-    str = allocate_and_copy(other.str, length);
+    this->length = other.length;
+    this->str = allocate_and_copy(other.str, strlen(other.str));
 }
 
 //destructor
-String::~String(){
+String::~String() {
     delete[] this->str;
 }
 
-//make_string function
-GenericString* make_string(const char *str){
-    return new String(str);
-}
-
-//convert a GenericString to a String, no const, and return a reference
-String& String::as_string(){
-    return dynamic_cast<String&>(*this);
-}
-
-
-//convert a GenericString to a String, const
-const String& String::as_string() const {
-    return dynamic_cast<const String&>(*this);
+//getter
+const char* String::get_str() const{
+    return this->str;
 }
 
 //operator=
-String& String::operator=(const char *str){
-    if(this->str == str){
-        return *this;
+String& String::operator=(const char *elem) {
+    if (this->str == elem) {
+        return *this; // same string
     }
     delete[] this->str;
-    length = strlen(str);
-    this->str = allocate_and_copy(str, length);
+    this->length = strlen(elem);
+    this->str = allocate_and_copy(elem, this->length);
     return *this;
 }
-
-//operator== for GenericString, checks if the string in the object is equal to the string in the other object
-bool String::operator==(const GenericString &other) const {
-    const String *other_string = dynamic_cast<const String*>(&other);
-    if(other_string == nullptr){
-        return false;
-    }
-    return *this == other_string->str;
-}
-
 //operator== for char*
 bool String::operator==(const char *other) const{
-    return strcmp(this->str, other) == 0;
+    if(!strcmp(this->str, other))
+        return true;
+    return false;
+}
+//operator== for GenericString
+bool String::operator==(const GenericString &other) const{
+    if(!strcmp(this->str, other.as_string().str))
+        return true;
+    return false;
 }
 
-//split the string according to delimiters
-//#####################need to implement string-array.cpp and string-array.h#####################
-StringArray String::split(const char *delimiters) const {
-    //first we initialize the StringArray object
-    StringArray *array = new StringArray();
+//split the string by the delimiters
+StringArray String::split(const char *delimiters) const{
+    char *cpy = allocate_and_copy(this->str, this->length); //we don't want to change the original string
 
-    //split this->str according to the given delimiters, using strtok
-    //and find out the size of the needed array of GenericString objects
-    //then allocate memory for the array and copy the strings
-    //then return the array
-    char *copy = allocate_and_copy(this->str, this->length); //we don't want to change the original string
-    char *token = strtok(copy, delimiters); //get the first token to start iterating over the string
+    char *token = strtok(cpy,delimiters); // first token
 
-    while(token != nullptr){ //count the number of words
-        array->size += 1;
-        token = strtok(nullptr, delimiters); //get the next token
+    StringArray array;
+
+    while(token != NULL) // insert each token to the array
+    {
+        array.insert(token);
+        token = strtok(NULL,delimiters);
     }
-    array->array = new GenericString*[array->size]; //allocate memory for the array of GenericString objects
-
-    token = strtok(this->str, delimiters); //start iterating over the string again to add the tokens to the array
-    for(int i = 0; i < array->size; i++){
-        array->array[i] = make_string(token); //add the token to the array
-        token = strtok(nullptr, delimiters); //get the next token
-    }
-
-    delete[] copy; //clean up
-
-    return *array;
+    delete[] cpy;
+    return array;
 }
 
 //convert the string into integer
-int String::to_integer() const {
+int String::to_integer() const{
     return atoi(this->str);
 }
 
 //remove leading and trailing white spaces
-//we first set indexes to note were the actual string starts and ends,
-//and then we allocate memory for the new string and copy the string
 String &String::trim(){
     if (this->length == 0){
         return *this;
@@ -142,11 +113,19 @@ String &String::trim(){
     return *this;
 }
 
+//convert a GenericString to a String, no const, and return a reference
+String& String::as_string(){//################tried a different approach################
+    return dynamic_cast<String&>(*this);
+}
 
-//just for testing, implement getters
-char* String::get_str() const{
-    return this->str;
+//convert a GenericString to a String, const
+const String& String::as_string() const {//################tried a different approach################
+    return dynamic_cast<const String&>(*this);
 }
-int String::get_length() const{
-    return this->length;
+
+//make a new string
+GenericString* make_string(const char *str){
+    return new String(str);
 }
+
+

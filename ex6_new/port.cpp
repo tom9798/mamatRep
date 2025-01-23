@@ -1,53 +1,56 @@
-#include "generic-field.h"
-#include "generic-string.h"
-#include "string-array.h"
-#include "string.h"
 #include "port.h"
-#include <bitset>
-#include <cstring>
-#include <cstdib>
+
+#define SRC_NAME "src-port"
+#define DST_NAME "dst-port"
+#define ACTIVE_RULE  true
 
 Port::Port() {
-    dst = false;
-    mask = 0;
-    port = "";
+    this->dst = false;
+    this->max_port = 0;
+    this->min_port = 0;
 }
 
-Port::~Port() {}
+Port::~Port(){}
 
 void Port::get_rule(GenericString &rule){
-//    StringArray fields = rule.split(",");
-//    fields.string_array_trim();
-
-    for (size_t i = 0; i < fields.size; ++i) {
-        StringArray key_value = fields.array[i]->as_string().split("=");
-        String key = key_value.array[0]->as_string();
-
-        //splitting the value to min and max
-        StringArray port = key_value.array[1]->as_string().split("-");
-        int min_port = port.array[0]->as_string().to_integer();
-        int max_port = port.array[1]->as_string().to_integer();
-
-        if (key == "src-port" || key == "dst-port") {
-            if (key == "dst-port") {
-                dst = true;
-            }
+    StringArray ruleArr = rule.split("=");
+    ruleArr.string_array_trim();
+    int min_value;
+    int max_value;
+    if (ruleArr.stringAtIndex(0)->as_string() == SRC_NAME || ruleArr.stringAtIndex(0)->as_string() == DST_NAME) { //##################tried a different approach##################
+        if (ruleArr.stringAtIndex(0)->as_string() == DST_NAME) {
+            this->dst = true;
         }
+        StringArray rangeValues = ruleArr.stringAtIndex(1)->as_string().split("-");
+        rangeValues.string_array_trim();
+        min_value = rangeValues.stringAtIndex(0)->to_integer();
+        max_value = rangeValues.stringAtIndex(1)->to_integer();
+        this->min_port = min_value;
+        this->max_port = max_value;
     }
 }
 
-bool Port::match(GenericString &packet){
+bool Port::match(const GenericString &packet) const{//##################tried a different approach##################
     StringArray fields = packet.split(",");
-    for (size_t i = 0; i < fields.size; ++i) {
-        fields.array[i]->trim();
-    }
+    fields.string_array_trim();
+
     int input_port = 0;
-    for (size_t i = 0; i < fields.size; ++i) {
-        StringArray key_value = fields.array[i]->as_string().split("=");
-        String key = key_value.array[0]->as_string();
-        int value = key_value.array[1]->to_integer();
-        if (key == "src-port" || key == "dst-port") {
-            input_port = value;
+    for (int i = 0; i < fields.getSize(); i++) {
+        StringArray key_value = fields.stringAtIndex(i)->as_string().split("=");
+        String key = key_value.stringAtIndex(0)->as_string();
+        int value = key_value.stringAtIndex(1)->to_integer();
+//        if (key == SRC_NAME || key == DST_NAME) {
+//            input_port = value;
+//        }
+        if (dst){
+            if (key == DST_NAME){
+                input_port = value;
+            }
+        }
+        else{
+            if (key == SRC_NAME){
+                input_port = value;
+            }
         }
     }
     if (input_port <= max_port && input_port >= min_port) {
@@ -55,3 +58,5 @@ bool Port::match(GenericString &packet){
     }
     return false;
 }
+
+

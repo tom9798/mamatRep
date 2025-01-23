@@ -54,7 +54,6 @@ void Ip::get_rule(GenericString &rule){
     std::bitset<32> ip_bits;
     for (size_t i = 0; i < octets.size; ++i) {
         std::bitset<8> octet_bits(octets.array[i]->as_string().to_integer());
-//        ip_bits = ip_bits | (octet_bits << (8 * (3 - i)));
         //preform a bitwise OR operation between the ip_bits and the octet_bits shifted to the left
         ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
     }

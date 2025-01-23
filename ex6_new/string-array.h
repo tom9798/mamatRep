@@ -1,18 +1,22 @@
-#ifndef STRINGARRAY_H
-#define STRINGARRAY_H
-
+#ifndef STRING_ARRAY_H
+#define STRING_ARRAY_H
 
 #include "generic-string.h"
 #include "string.h"
 
-//this class will maintain an array of GenericString object pointers, made up of the words in the original string
-class StringArray {
-public:
-    int size;
+
+
+class StringArray{
     GenericString **array;
-    StringArray(); // constructor
-    StringArray(const StringArray &other); // copy constructor
-    ~StringArray(); // destructor
+    int size;
+public:
+    StringArray(); //constructor
+    StringArray(const StringArray &other); //copy constructor
+    ~StringArray(); //destructor
+    void insert(char *str); //insert string to array
+    void trimArray() const; //trim each string in the array
+    int getSize() const; //get array size
+    GenericString *stringAtIndex(int index) const; //return a pointer to a GenericString object located in a given index
 };
 
-#endif // STRINGARRAY_H
+#endif

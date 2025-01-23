@@ -38,11 +38,11 @@ void Port::get_rule(GenericString &rule){
 
 bool Port::match(GenericString &packet){
     StringArray fields = packet.split(",");
-    for (size_t i = 0; i < fields.size; ++i) {
+    for (int i = 0; i < fields.size; i++) {
         fields.array[i]->trim();
     }
     int input_port = 0;
-    for (size_t i = 0; i < fields.size; ++i) {
+    for (int i = 0; i < fields.size; i++) {
         StringArray key_value = fields.array[i]->as_string().split("=");
         String key = key_value.array[0]->as_string();
         int value = key_value.array[1]->to_integer();
