@@ -8,6 +8,7 @@ class Ip : public GenericField {
     int mask;
     unsigned int ip;
     bool dst;
+//    String ip_str;
 
 public:
 

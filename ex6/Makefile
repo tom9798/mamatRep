@@ -1,29 +1,33 @@
 CXX=g++
 CXXLINK=$(CXX)
-CXXFLAGS= -g -Wall -std=c++11
-OBJS= string.o ip.o port.o string-array.o
-RM= rm -rf
+CXXFLAGS=-g -Wall -std=c++11 -fpic
+LDFLAGS = -shared
+OBJS=string.o ip.o port.o main.o string-array.o
+LIBS = -lfirewall -L. -linput -L.
+EXEC=firewall.exe
+RM=rm -rf
 
-firewall.exe: main.o libfirewall.so
-	$(CXXLINK) $(CXXFLAGS) main.o -o firewall.exe -lfirewall -linput -L.
+$(EXEC): $(OBJS) libfirewall.so	libinput.so
+	$(CXXLINK) $(OBJS) -o $(EXEC) libfirewall.so libinput.so -L.
 
-libfirewall.so: $(OBJS)
-	$(CXXLINK) -shared $(OBJS) -o libfirewall.so
+libfirewall.so: string.o ip.o port.o string-array.o	main.o
+	$(CXXLINK) $(LDFLAGS) string.o ip.o port.o string-array.o -o libfirewall.so
 
-string.o: string.h string.cpp generic-string.h
-	$(CXXLINK) $(CXXFLAGS) -c -fpic string.cpp
+main.o: string-array.h generic-string.h input.h string.h ip.h port.h main.cpp
+	$(CXX) $(CXXFLAGS) -c main.cpp
 
-string-array.o: string-array.h string-array.cpp string.h generic-string.h
-	$(CXXLINK) $(CXXFLAGS) -c -fpic string-array.cpp
+string-array.o: string-array.cpp string-array.h generic-string.h
+	$(CXX) $(CXXFLAGS) -c string-array.cpp
 
-ip.o: ip.h ip.cpp string.h string-array.h generic-field.h
-	$(CXXLINK) $(CXXFLAGS) -c -fpic ip.cpp
+string.o: string.cpp string.h string-array.h generic-string.h
+	$(CXX) $(CXXFLAGS) -c string.cpp
 
-port.o: port.h port.cpp string.h string-array.h generic-field.h
-	$(CXXLINK) $(CXXFLAGS) -c -fpic port.cpp
+ip.o: ip.cpp ip.h string.h string-array.h generic-string.h
+	$(CXX) $(CXXFLAGS) -c ip.cpp
 
-main.o: main.cpp string.h string-array.h ip.h port.h input.h generic-string.h generic-field.h
-	$(CXXLINK) $(CXXFLAGS) -c -fpic main.cpp
+port.o: port.cpp port.h string.h string-array.h generic-string.h
+	$(CXX) $(CXXFLAGS) -c port.cpp
+
 
 clean:
-	$(RM) *.o
+	$(RM) $(OBJS) $(EXEC)

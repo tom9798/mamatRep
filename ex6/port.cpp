@@ -16,8 +16,8 @@ Port::Port() {
 Port::~Port() {}
 
 void Port::get_rule(GenericString &rule){
-    StringArray fields = rule.split(",");
-    fields.string_array_trim();
+//    StringArray fields = rule.split(",");
+//    fields.string_array_trim();
 
     for (size_t i = 0; i < fields.size; ++i) {
         StringArray key_value = fields.array[i]->as_string().split("=");
@@ -38,7 +38,9 @@ void Port::get_rule(GenericString &rule){
 
 bool Port::match(GenericString &packet){
     StringArray fields = packet.split(",");
-    fields.string_array_trim();
+    for (size_t i = 0; i < fields.size; ++i) {
+        fields.array[i]->trim();
+    }
     int input_port = 0;
     for (size_t i = 0; i < fields.size; ++i) {
         StringArray key_value = fields.array[i]->as_string().split("=");

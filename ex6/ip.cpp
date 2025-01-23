@@ -10,13 +10,13 @@
 Ip::Ip() {
     dst = false;
     mask = 0;
-    ip = "";
+    ip = 0;
 }
 
 Ip::~Ip() {}
 
 void Ip::get_rule(GenericString &rule){
-    StringArray fields = rule.split(",");
+//    StringArray fields = rule.split(",");
     String ip_str;
     unsigned int ip_mask;
     for (size_t i = 0; i < fields.size; ++i) {
@@ -48,26 +48,13 @@ void Ip::get_rule(GenericString &rule){
 
 bool Ip::match(GenericString &packet){
     StringArray fields = packet.split(",");
+    for (size_t i = 0; i < fields.size; ++i) {
+        fields.array[i]->trim();
+    }
     for (size_t i = 0; i < fields.size; ++i) { //iterating over the fields
         StringArray key_value = fields.array[i]->as_string().split("=");
         String key = key_value.array[0]->as_string();
         String value = key_value.array[1]->as_string();
-//        if (!dst) {
-//            StringArray octets = value.split(".");
-//            std::bitset<32> ip_bits;
-//            for (size_t j = 0; j < octets.size; ++j) {
-//                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
-//                ip_bits |= octet_bits << (8 * (3 - j));
-//            }
-//        }
-//        if(dst){
-//            StringArray octets = value.split(".");
-//            std::bitset<32> ip_bits;
-//            for (size_t j = 0; j < octets.size; ++j) {
-//                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
-//                ip_bits |= octet_bits << (8 * (3 - j));
-//            }
-//        }
         //searching the right ip field according to this->dst
         if (key == "src-ip" || key == "dst-ip") {
             StringArray octets = value.split(".");
