@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     }
 
 //    String name = rule.array[0].trim().as_string();
-    String name = (rule->array[0])->trim().as_string();
+    String name = (rule.array[0])->trim().as_string();
 //    String val = rule.array[1].trim().as_string();
 
     if (name == "src-ip" || name == "dst-ip") {
