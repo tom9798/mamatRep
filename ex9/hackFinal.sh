@@ -18,7 +18,7 @@ while [ $number -le 999999 ]; do
   # Run the vault program with solution.txt as an argument
   output=$(./vault solution.txt)
   # Print the output for debugging
-  echo "Output: $output"
+#  echo "Output: $output"
 
   # Check if the output contains 'BOOM!'
   if echo "$output" | grep -q 'BOOM!'; then
