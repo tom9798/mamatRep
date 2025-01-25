@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Function to get the current number from the sixth row in the solution file
+get_current_number() {
+  awk 'NR==6 {print $1 $2 $3 $4 $5 $6}' solution.txt
+}
+
 # Function to update only the sixth row in the solution file
 update_sixth_row() {
   local number=$1
@@ -7,8 +12,8 @@ update_sixth_row() {
   awk -v new_row="${formatted_number:0:1} ${formatted_number:1:1} ${formatted_number:2:1} ${formatted_number:3:1} ${formatted_number:4:1} ${formatted_number:5:1}" 'NR==6 {$0=new_row}1' solution.txt > temp.txt && mv temp.txt solution.txt
 }
 
-# Initialize the number
-number=0
+# Get the current number from the sixth row
+number=$(get_current_number)
 
 # Loop through all combinations of the six integers
 while [ $number -le 999999 ]; do
