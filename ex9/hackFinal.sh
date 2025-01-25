@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Function to update the sixth row in the solution file
+# Function to update only the sixth row in the solution file
 update_sixth_row() {
   local number=$1
   printf -v formatted_number "%06d" $number
-  echo "Wow! Brazil is big." > solution.txt
-  echo "1 3 6 10 15 21" >> solution.txt
-  echo "0 749" >> solution.txt
-  echo "132 4" >> solution.txt
-  echo "5 115" >> solution.txt
-  echo "${formatted_number:0:1} ${formatted_number:1:1} ${formatted_number:2:1} ${formatted_number:3:1} ${formatted_number:4:1} ${formatted_number:5:1}" >> solution.txt
+  awk -v new_row="${formatted_number:0:1} ${formatted_number:1:1} ${formatted_number:2:1} ${formatted_number:3:1} ${formatted_number:4:1} ${formatted_number:5:1}" 'NR==6 {$0=new_row}1' solution.txt > temp.txt && mv temp.txt solution.txt
 }
 
 # Initialize the number
