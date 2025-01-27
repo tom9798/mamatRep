@@ -37,8 +37,10 @@ void Ip::get_rule(GenericString &rule){
     std::bitset<32> ip_bits;
     for (int i = 0; i < octets.getSize(); i++) {
 //        std::bitset<8> octet_bits(octets.array[i]->as_string().to_integer());
-        std::bitset<8> octet_bits(octets.stringAtIndex(i)->as_string().to_integer());
-        //preform a bitwise OR operation between the ip_bits and the octet_bits shifted to the left
+        std::bitset<32> octet_bits(octets.stringAtIndex(i)->as_string().to_integer());
+        //concatenate zeros to the left of the octet
+
+        //preform a bitwise OR operation between the ip_bits and the octet_bits shifted to the left by 8 * (3 - i)
         ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
     }
     this->ip = ip_bits.to_ulong();
@@ -64,7 +66,7 @@ bool Ip::match(const GenericString &packet) const{
             ip_bits = 0;
             for (size_t j = 0; j < octets.getSize(); ++j) {
 //                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
-                std::bitset<8> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
+                std::bitset<32> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
 //                ip_bits |= octet_bits << (8 * (3 - j));
                 ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
             }
@@ -73,8 +75,8 @@ bool Ip::match(const GenericString &packet) const{
 
     //creating a mask for the left-most bits
     unsigned int mask_bits = 0;
-    mask_bits = (1 << this->mask) - 1;
-    mask_bits <<= (32 - this->mask);
+    mask_bits = (1 << this->mask_ip) - 1;
+    mask_bits <<= (32 - this->mask_ip);
 
     //checking if the IP address matches the rule
     unsigned int rule_ip = this->ip & mask_bits >> (32 - this->mask_ip);
