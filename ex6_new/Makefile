@@ -6,7 +6,7 @@ OBJS=string.o ip.o port.o main.o string-array.o
 
 
 firewall.exe:string-array.o string.o ip.o port.o main.o libfirewall.so libinput.so
-	$(CXXLINK) $(OBJS) -o firewall.exe -firewall -linput -L.
+	$(CXXLINK) $(OBJS) -o firewall.exe -firewall.so -linput -L.
 
 main.o: main.cpp string-array.h generic-string.h input.h string.h ip.h port.h
 	$(CXX) $(CXXFLAGS) -c main.cpp
