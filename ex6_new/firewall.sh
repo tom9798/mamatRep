@@ -33,36 +33,80 @@
 #packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
 #echo "$packets_passed"
 
-##unset packets all_rules rules_file packets_passed
+
+
+
+
 #!/bin/bash
 
-# Setting up the environment
-export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-
-# Reading input files and packets
+#getting rules file and packet file
 rules_file="$1"
-packets=$(cat)  # Reading packets from standard input
-#packets=$(</dev/stdin)  # Reading packets from standard input
-all_rules=$(grep -vE '^#|^$' "$rules_file")  # Filter out comments and empty lines directly
+packets=$(cat)
 
-# Variable to collect packets that passed
-passed_packets=""
+# deleting all comments and lines starting with '#'
+rules=$(sed -e 's/#.*//' -e '/^$/d' "$rules_file") #echo "$rules"
 
-# Loop to process each rule
-while IFS=',' read -r src_ip dst_ip src_port dst_port; do
-    # Removing unnecessary spaces
-    src_ip=$(echo "$src_ip" | tr -d ' ')
-    dst_ip=$(echo "$dst_ip" | tr -d ' ')
-    src_port=$(echo "$src_port" | tr -d ' ')
-    dst_port=$(echo "$dst_port" | tr -d ' ')
 
-    # Processing each rule using firewall.exe
-    matching_packets=$(echo "$packets" | ./firewall.exe "$src_ip" | \
-                        ./firewall.exe "$dst_ip" | \
-                        ./firewall.exe "$src_port" | \
-                        ./firewall.exe "$dst_port")
+IFS=, #coma is a delimiter
+while read -r rule1 rule2 rule3 rule4 ; do
+    {
+        #funneling only matching packets to the next rule
+        funnel=$(echo "$packets" | ./firewall.exe "$(echo "$rule1")")
+        funnel=$(echo "$funnel" | ./firewall.exe "$rule2")
+        funnel=$(echo "$funnel" | ./firewall.exe "$rule3")
+        funnel=$(echo "$funnel" | ./firewall.exe "$rule4")
+        all_match_packets="$all_match_packets\n$funnel"
 
-    # Adding the packets that passed to the variable
-    passed_packets+="$matching_packets"$'\n'
 
-done <<< "$all_rules"
+    }
+done <<< "$rules"
+
+#removing all spaces and empty lines, sort, then prints the final value
+all_match_packets="${all_match_packets// /}"
+echo -e "$all_match_packets" | sed "s/ //g ; /^$/d" | sort -u
+
+
+
+
+
+
+
+
+
+
+
+
+
+##unset packets all_rules rules_file packets_passed
+##!/bin/bash
+#
+## Setting up the environment
+#export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+#
+## Reading input files and packets
+#rules_file="$1"
+#packets=$(cat)  # Reading packets from standard input
+##packets=$(</dev/stdin)  # Reading packets from standard input
+#all_rules=$(grep -vE '^#|^$' "$rules_file")  # Filter out comments and empty lines directly
+#
+## Variable to collect packets that passed
+#passed_packets=""
+#
+## Loop to process each rule
+#while IFS=',' read -r src_ip dst_ip src_port dst_port; do
+#    # Removing unnecessary spaces
+#    src_ip=$(echo "$src_ip" | tr -d ' ')
+#    dst_ip=$(echo "$dst_ip" | tr -d ' ')
+#    src_port=$(echo "$src_port" | tr -d ' ')
+#    dst_port=$(echo "$dst_port" | tr -d ' ')
+#
+#    # Processing each rule using firewall.exe
+#    matching_packets=$(echo "$packets" | ./firewall.exe "$src_ip" | \
+#                        ./firewall.exe "$dst_ip" | \
+#                        ./firewall.exe "$src_port" | \
+#                        ./firewall.exe "$dst_port")
+#
+#    # Adding the packets that passed to the variable
+#    passed_packets+="$matching_packets"$'\n'
+#
+#done <<< "$all_rules"
