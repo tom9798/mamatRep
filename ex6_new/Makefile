@@ -15,7 +15,7 @@ ip.o: ip.cpp ip.h string.h string-array.h generic-string.h
 	$(CXX) $(CXXFLAGS) -c ip.cpp
 
 port.o: port.cpp port.h string.h string-array.h generic-string.h
-	$(CXX) $(CXXFLAGS) -c prot.cpp
+	$(CXX) $(CXXFLAGS) -c port.cpp
 
 string.o: string.cpp string.h string-array.h generic-string.h
 	$(CXX) $(CXXFLAGS) -c string.cpp
