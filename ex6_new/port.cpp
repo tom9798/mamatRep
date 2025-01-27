@@ -27,17 +27,6 @@ void Port::get_rule(GenericString &rule){
         max_value = rangeValues.stringAtIndex(1)->to_integer();
         this->min_port = min_value;
         this->max_port = max_value;
-
-//        StringArray rangeValues = ruleArr.stringAtIndex(1)->as_string().split("-");
-//        rangeValues.trimArray();
-//        if (rangeValues.getSize() >= 2) {
-//            min_value = rangeValues.stringAtIndex(0)->to_integer();
-//            max_value = rangeValues.stringAtIndex(1)->to_integer();
-//        } else {
-//            // Handle error: invalid range format
-//            min_value = 0;
-//            max_value = 0;
-//        }
     }
 }
 
