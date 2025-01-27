@@ -15,7 +15,6 @@ int main(int argc,char* argv[]){
         Port PortRule;
         PortRule.get_rule(*Rule);
         parse_input(PortRule);
-        break;
     }
 
     //ip
@@ -23,7 +22,6 @@ int main(int argc,char* argv[]){
         Ip IpRule;
         IpRule.get_rule(*Rule);
         parse_input(IpRule);
-        break;
     }
 
     delete Rule;
