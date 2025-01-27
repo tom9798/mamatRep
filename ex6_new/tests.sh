@@ -1,4 +1,4 @@
-bin/bash/!#
+#!/bin/bash
 
 for i in {0..3}; do
 	./firewall.sh "for-students/test$i-rules.in" <for-students/test$i-pkts.in >for-students/test$i-pkts.test
