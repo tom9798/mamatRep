@@ -5,10 +5,10 @@
 #include "input.h"
 
 int main(int argc,char* argv[]){
-    GenericString *Rule = (argv[1]);
-    StringArray Type-Rule = Rule->split("=");
-    Type-Rule.string_array_trim();
-    String *type = Type-Rule.stringAtIndex(0)->as_string();
+    String *Rule = make_string(argv[1]);
+    StringArray Type_Rule = Rule->split("=");
+    Type_Rule.trimArray();
+    String *type = Type_Rule.stringAtIndex(0)->as_string();
 
     //port
     if (*type == "src-port" || *type == "dst-port"){
