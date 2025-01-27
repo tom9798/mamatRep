@@ -1,11 +1,11 @@
 bin/bash/!#
 
 for i in {0..3}; do
-	./firewall.sh "tests/test$i-rules.in" <tests/test$i-pkts.in >tests/test$i-pkts.test
+	./firewall.sh "for-students/test$i-rules.in" <for-students/test$i-pkts.in >for-students/test$i-pkts.test
 done
 
 for i in {0..3}; do
-	p=$(diff ./tests/test$i-pkts.out ./tests/test$i-pkts.test)
+	p=$(diff ./for-students/test$i-pkts.out ./for-students/test$i-pkts.test)
 	if [[ -z "$p" ]]; then
 		echo "passed test$i."
 	fi
