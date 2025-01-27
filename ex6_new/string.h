@@ -21,12 +21,12 @@ public:
     ~String(); // destructor
 
     const char* get_str() const; // get the string
-    GenericString& operator=(const char *str);
+    String& operator=(const char *str);
     bool operator==(const char *other) const;
     bool operator==(const GenericString &other) const;
     StringArray split(const char *delimiters) const override;
     int to_integer() const;
-    GenericString& trim();
+    String& trim();
     String& as_string();
     const String& as_string() const;
 };
