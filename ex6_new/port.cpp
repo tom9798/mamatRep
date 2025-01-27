@@ -38,20 +38,30 @@ bool Port::match(const GenericString &packet) const{//##################tried a 
     for (int i = 0; i < fields.getSize(); i++) {
         StringArray key_value = fields.stringAtIndex(i)->as_string().split("=");
         String key = key_value.stringAtIndex(0)->as_string();
-        int value = key_value.stringAtIndex(1)->to_integer();
-//        if (key == SRC_NAME || key == DST_NAME) {
-//            input_port = value;
+
+
+        if(dst && key == DST_NAME){
+            input_port = key_value.stringAtIndex(1)->to_integer();
+        }
+        else if(!dst && key == SRC_NAME){
+            input_port = key_value.stringAtIndex(1)->to_integer();
+        }
+
+
+//        int value = key_value.stringAtIndex(1)->to_integer();
+////        if (key == SRC_NAME || key == DST_NAME) {
+////            input_port = value;
+////        }
+//        if (dst){
+//            if (key == DST_NAME){
+//                input_port = value;
+//            }
 //        }
-        if (dst){
-            if (key == DST_NAME){
-                input_port = value;
-            }
-        }
-        else{
-            if (key == SRC_NAME){
-                input_port = value;
-            }
-        }
+//        else{
+//            if (key == SRC_NAME){
+//                input_port = value;
+//            }
+//        }
     }
     if (input_port <= max_port && input_port >= min_port) {
         return true;
