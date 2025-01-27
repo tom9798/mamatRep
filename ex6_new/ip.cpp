@@ -80,7 +80,8 @@ bool Ip::match(const GenericString &packet) const{
 
     //checking if the IP address matches the rule
     unsigned int rule_ip = this->ip & mask_bits >> (32 - this->mask_ip);
-    unsigned int packet_ip = ip_bits & mask_bits >> (32 - this->mask_ip);
+//    unsigned int packet_ip = ip_bits & mask_bits >> (32 - this->mask_ip);
+    unsigned int packet_ip = ip_bits.to_ulong() & mask_bits >> (32 - this->mask_ip);
     return rule_ip == packet_ip;
 }
 
