@@ -25,6 +25,7 @@ int main(int argc,char* argv[]){
     }
 
     delete Rule;
+    return 0;
 }
 
 
