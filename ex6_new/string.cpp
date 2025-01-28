@@ -3,7 +3,12 @@
 
 //allocate memory and copy the string
 char* String::allocate_and_copy(const char *str, int size) {
-    return strncpy(new char[size + 1], str, size+1);
+//    return strncpy(new char[size + 1], str, size+1);
+    char *new_str = new char[size + 1];
+    for (int i = 0; i < size+1; i++) {
+        new_str[i] = str[i];
+    }
+    return new_str;
 }
 
 //constructor
