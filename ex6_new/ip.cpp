@@ -56,10 +56,37 @@ bool Ip::match(const GenericString &packet) const{
         key_value.trimArray();
 //        String key = key_value.array[0]->as_string();
         String key = key_value.stringAtIndex(0)->as_string();
-//        String value = key_value.array[1]->as_string();
-        String value = key_value.stringAtIndex(1)->as_string();
+
+//        if (dst && key == DST_NAME) {
+//            int value = key_value.stringAtIndex(1)->as_string();
+//            StringArray octets = key_value.stringAtIndex(1)->as_string().split(".");
+//            std::bitset<32> octet_bits(value);
+//            ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+//        }
+//        else if (!dst && key == SRC_NAME) {
+//            StringArray octets = key_value.stringAtIndex(1)->as_string().split(".");
+//            int value = key_value.stringAtIndex(1)->as_string().to_integer();
+//            std::bitset<32> octet_bits(value);
+//            ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+//        }
+
+
         //searching the right ip field according to this->dst
-        if (key == SRC_NAME || key == DST_NAME) {
+        if (key == SRC_NAME && !dst) {
+            String value = key_value.stringAtIndex(1)->as_string();
+            StringArray octets = value.split(".");
+//            std::bitset<32> ip_bits;
+            //put zeros in the ip_bits
+            ip_bits = 0;
+            for (int j = 0; j < octets.getSize(); j++) {
+//                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
+                std::bitset<32> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
+//                ip_bits |= octet_bits << (8 * (3 - j));
+                ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+            }
+        }
+        if (dst && key == DST_NAME) {
+            String value = key_value.stringAtIndex(1)->as_string();
             StringArray octets = value.split(".");
 //            std::bitset<32> ip_bits;
             //put zeros in the ip_bits
