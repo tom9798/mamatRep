@@ -34,7 +34,7 @@ void Ip::get_rule(GenericString &rule){
 
     //converting the IP to binary
     StringArray octets = ip_str.split(".");
-    std::bitset<32> ip_bits;
+    std::bitset<32> ip_bits = 0;
     for (int i = 0; i < octets.getSize(); i++) {
 //        std::bitset<8> octet_bits(octets.array[i]->as_string().to_integer());
         std::bitset<32> octet_bits(octets.stringAtIndex(i)->as_string().to_integer());
@@ -49,7 +49,7 @@ void Ip::get_rule(GenericString &rule){
 bool Ip::match(const GenericString &packet) const{
     StringArray fields = packet.split(",");
     fields.trimArray();
-    std::bitset<32> ip_bits;
+    std::bitset<32> ip_bits = 0;
     for (int i = 0; i < fields.getSize(); i++) { //iterating over the fields
 //        StringArray key_value = fields.array[i]->as_string().split("=");
         StringArray key_value = fields.stringAtIndex(i)->as_string().split("=");
