@@ -17,6 +17,7 @@ Ip::~Ip() {}
 void Ip::get_rule(GenericString &rule){
     String ip_str("");
     StringArray key_value = rule.split("=");
+    key_value.trimArray();
 //    String key = key_value.array[0]->as_string();
     String key = key_value.stringAtIndex(0)->as_string();
 //    String value = key_value.array[1]->as_string();
@@ -26,14 +27,14 @@ void Ip::get_rule(GenericString &rule){
             dst = true;
         }
         StringArray ipRule = value.split("/"); //splitting the value into the IP and the rule
-//        ip_str = ipRule.array[0]->as_string().str;
+        ipRule.trimArray();
         ip_str = ipRule.stringAtIndex(0)->as_string().get_str();
-//        this->mask_ip = ipRule.array[1]->as_string().to_integer();
         this->mask_ip = ipRule.stringAtIndex(1)->to_integer();
     }
 
     //converting the IP to binary
     StringArray octets = ip_str.split(".");
+    octets.trimArray();
     std::bitset<32> ip_bits = 0;
     for (int i = 0; i < octets.getSize(); i++) {
 //        std::bitset<8> octet_bits(octets.array[i]->as_string().to_integer());
@@ -51,24 +52,9 @@ bool Ip::match(const GenericString &packet) const{
     fields.trimArray();
     std::bitset<32> ip_bits = 0;
     for (int i = 0; i < fields.getSize(); i++) { //iterating over the fields
-//        StringArray key_value = fields.array[i]->as_string().split("=");
         StringArray key_value = fields.stringAtIndex(i)->as_string().split("=");
         key_value.trimArray();
-//        String key = key_value.array[0]->as_string();
         String key = key_value.stringAtIndex(0)->as_string();
-
-//        if (dst && key == DST_NAME) {
-//            int value = key_value.stringAtIndex(1)->as_string();
-//            StringArray octets = key_value.stringAtIndex(1)->as_string().split(".");
-//            std::bitset<32> octet_bits(value);
-//            ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
-//        }
-//        else if (!dst && key == SRC_NAME) {
-//            StringArray octets = key_value.stringAtIndex(1)->as_string().split(".");
-//            int value = key_value.stringAtIndex(1)->as_string().to_integer();
-//            std::bitset<32> octet_bits(value);
-//            ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
-//        }
 
 
         //searching the right ip field according to this->dst
