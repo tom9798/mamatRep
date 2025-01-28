@@ -50,7 +50,7 @@ bool Ip::match(const GenericString &packet) const{
     StringArray fields = packet.split(",");
     fields.trimArray();
     std::bitset<32> ip_bits;
-    for (size_t i = 0; i < fields.getSize(); ++i) { //iterating over the fields
+    for (int i = 0; i < fields.getSize(); i++) { //iterating over the fields
 //        StringArray key_value = fields.array[i]->as_string().split("=");
         StringArray key_value = fields.stringAtIndex(i)->as_string().split("=");
         key_value.trimArray();
@@ -64,7 +64,7 @@ bool Ip::match(const GenericString &packet) const{
 //            std::bitset<32> ip_bits;
             //put zeros in the ip_bits
             ip_bits = 0;
-            for (size_t j = 0; j < octets.getSize(); ++j) {
+            for (int j = 0; j < octets.getSize(); j++) {
 //                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
                 std::bitset<32> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
 //                ip_bits |= octet_bits << (8 * (3 - j));
