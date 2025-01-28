@@ -42,7 +42,8 @@ void Ip::get_rule(GenericString &rule){
         //concatenate zeros to the left of the octet
 
         //preform a bitwise OR operation between the ip_bits and the octet_bits shifted to the left by 8 * (3 - i)
-        ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+//        ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+        ip_bits = (ip_bits | octet_bits)<<8;
     }
     this->ip = ip_bits.to_ulong();
 }
@@ -68,7 +69,8 @@ bool Ip::match(const GenericString &packet) const{
 //                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
                 std::bitset<32> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
 //                ip_bits |= octet_bits << (8 * (3 - j));
-                ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+//                ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+                ip_bits = (ip_bits | octet_bits)<<8;
             }
         }
         if (dst && key == DST_NAME) {
@@ -81,20 +83,21 @@ bool Ip::match(const GenericString &packet) const{
 //                std::bitset<8> octet_bits(octets.array[j]->as_string().to_integer());
                 std::bitset<32> octet_bits(octets.stringAtIndex(j)->as_string().to_integer());
 //                ip_bits |= octet_bits << (8 * (3 - j));
-                ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+//                ip_bits = (ip_bits | (octet_bits << (8 * (3 - i))));
+                ip_bits = (ip_bits | octet_bits)<<8;
             }
         }
     }
 
     //creating a mask for the left-most bits
-    unsigned int mask_bits = 0;
-    mask_bits = (1 << this->mask_ip) - 1;
-    mask_bits <<= (32 - this->mask_ip);
+//    unsigned int mask_bits = 0;
+//    mask_bits = (1 << this->mask_ip) - 1;
+//    mask_bits <<= (32 - this->mask_ip);
 
     //checking if the IP address matches the rule
-    unsigned int rule_ip = this->ip & mask_bits; //>> (32 - this->mask_ip);
+    unsigned int rule_ip = this->ip >> (32 - this->mask_ip);
 //    unsigned int packet_ip = ip_bits & mask_bits >> (32 - this->mask_ip);
-    unsigned int packet_ip = ip_bits.to_ulong() & mask_bits; //>> (32 - this->mask_ip);
+    unsigned int packet_ip = ip_bits.to_ulong() >> (32 - this->mask_ip);
     return rule_ip == packet_ip;
 }
 
