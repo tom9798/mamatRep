@@ -8,7 +8,8 @@ all_rules=$(<$rules_file)
 # keep packets that passed:
 packets_passed=""
 # clean comments and empty lines:
-all_rules=$(echo "$all_rules" | awk '{sub(/#.*/, "", $0); if (NF) print}')
+#all_rules=$(echo "$all_rules" | awk '{sub(/#.*/, "", $0); if (NF) print}')
+all_rules=$(awk '{sub(/#.*/, ""); if (NF) print}' "$rules_file")
 
 while IFS= read -r rule; do
     iter_rule="$rule"
@@ -26,9 +27,11 @@ while IFS= read -r rule; do
     # clean up
     unset rule1 rule2 rule3 rule4 out
 
-done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
+#done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
+done <<< "$all_rules"
 
-packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
+#packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
+packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF')
 echo "$packets_passed"
 
 ##!/bin/bash
