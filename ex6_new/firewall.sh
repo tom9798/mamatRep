@@ -20,8 +20,8 @@ while IFS= read -r rule; do
     rule3=${rule3// /}
     rule4=${rule4// /}
     # process packets with all rules in one go
-#    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
-    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4", tr -d ' ')
+    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
+#    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4", tr -d ' ')
 #    out=$(echo "$packets" | ./firewall.exe "$rule1" "$rule2" "$rule3" "$rule4" | sort | tr -d ' ')
     packets_passed+=" $out"
 
@@ -31,8 +31,9 @@ while IFS= read -r rule; do
 #done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
 done <<< "$all_rules"
 
-packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
+#packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
 #packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF')
+packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort)
 echo "$packets_passed"
 
 ##!/bin/bash
