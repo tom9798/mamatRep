@@ -53,6 +53,6 @@ done <<< "$all_rules"
 #packets_passed=$(echo "$packets" | tr ' ' '\n' | awk 'NF' | sort | uniq)
 
 #    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
-output=$(echo "$packets_passed" | sort | tr -d ' ' | tr ' ' '\n' | awk 'NF')
+output=$(echo "$packets_passed" | sort | tr -d ' ' | tr ' ' '\n' | awk 'NF' | uniq)
 
 echo "$packets_passed"
