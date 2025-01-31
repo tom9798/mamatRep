@@ -2,7 +2,7 @@
 export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 
 allPackets=$(cat)
-allRules=$1
+allRules=$(<$1)
 
 # Remove comments and empty lines
 allRules=$(echo "$allRules" | sed -e 's/#.*//' -e '/^$/d')
