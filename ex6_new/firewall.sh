@@ -2,11 +2,11 @@
 export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 
 allPackets=$(cat)
-allRules=$(<$1)
+#allRules=$(<$1)
+Rules="$1"
 
 # Remove comments and empty lines
-allRules=$(echo "$allRules" | sed -e 's/#.*//' -e '/^$/d')
-#echo "$allRules"
+allRules=$(sed -e 's/#.*//' -e '/^$/d' "$Rules")
 
 # Loop over all rules
 while IFS=, read -r src_ip dst_ip src_port dst_port; do
