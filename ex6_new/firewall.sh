@@ -20,13 +20,13 @@ while IFS=, read -r src_ip dst_ip src_port dst_port; do
                     ./firewall.exe "$src_port" | \
                     ./firewall.exe "$dst_port")
     allPassedPackets+="$passedPackets"$'\n'
-
+done <<< "$allRules"
 #remove spaces and empty lines and sort the packets
 #allPassedPackets=$(echo "$allPassedPackets" | tr -d ' ' | sed '/^$/d' | sort -u)
 allPassedPackets$="${allPassedPackets// /}"
 allPassedPackets=$(echo -e "$allPassedPackets" | sed "s/ //g ; /^$/d" | sort -u)
 echo "$allPassedPackets"
-done <<< "$allRules"
+
 
 
 
