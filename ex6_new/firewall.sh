@@ -27,11 +27,11 @@ while IFS= read -r rule; do
     # clean up
     unset rule1 rule2 rule3 rule4 out
 
-done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
-#done <<< "$all_rules"
+#done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
+done <<< "$all_rules"
 
-#packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
-packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF')
+packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
+#packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF')
 echo "$packets_passed"
 
 ##!/bin/bash
