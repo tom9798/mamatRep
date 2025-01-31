@@ -42,32 +42,29 @@ Ip::~Ip() {}
 //    this->ip = ip_bits.to_ulong();
 //}
 
-void Ip::get_rule(GenericString &rule){
-    String ip_str("");
+void Ip::get_rule(GenericString &rule) {
     StringArray key_value = rule.split("=");
     key_value.trimArray();
     String key = key_value.stringAtIndex(0)->as_string();
     String value = key_value.stringAtIndex(1)->as_string();
-    if (key == SRC_NAME || key == DST_NAME) {
-        if (key == DST_NAME) {
-            dst = true;
-        }
-        StringArray ipRule = value.split("/"); //splitting the value into the IP and the rule
-        ipRule.trimArray();
-        ip_str = ipRule.stringAtIndex(0)->as_string().get_str();
-        this->mask_ip = ipRule.stringAtIndex(1)->to_integer();
-    }
 
-    //converting the IP to binary
-    StringArray octets = ip_str.split(".");
-    octets.trimArray();
-    std::bitset<32> ip_bits = 0;
-    for (int i = 0; i < octets.getSize(); i++) {
-        std::bitset<32> octet_bits(octets.stringAtIndex(i)->as_string().to_integer());
-        //preform a bitwise OR operation between the ip_bits and the octet_bits shifted to the left by 8 * (3 - i)
-        ip_bits = (ip_bits | octet_bits)<<8;
+    if (key == SRC_NAME || key == DST_NAME) {
+        dst = (key == DST_NAME);
+
+        StringArray ipRule = value.split("/");
+        ipRule.trimArray();
+        String ip_str = ipRule.stringAtIndex(0)->as_string();
+        this->mask_ip = ipRule.stringAtIndex(1)->to_integer();
+
+        // Converting the IP to binary
+        StringArray octets = ip_str.split(".");
+        octets.trimArray();
+        std::bitset<32> ip_bits = 0;
+        for (int i = 0; i < octets.getSize(); ++i) {
+            ip_bits = (ip_bits << 8) | std::bitset<32>(octets.stringAtIndex(i)->as_string().to_integer());
+        }
+        this->ip = ip_bits.to_ulong();
     }
-    this->ip = ip_bits.to_ulong();
 }
 
 bool Ip::match(const GenericString &packet) const{
