@@ -3,7 +3,7 @@
 //constructor
 //we will initialize the StringArray without a given size and array, and just return a pointer,
 //so we could change it directly with the copy constructor but with a reference
-StringArray::StringArray() { //################tried a different approach################
+StringArray::StringArray() {
     this->size = 0;
     this->array = nullptr;
 }
@@ -26,7 +26,7 @@ StringArray::~StringArray() {
 }
 
 //insert a string to the array
-void StringArray::insert(char* str) { //################tried a different approach################
+void StringArray::insert(char* str) {
     this->size++; // update the size
     this->array = static_cast<GenericString**>(realloc(this->array, this->size * sizeof(GenericString*)));
     if (this->array == nullptr) {

@@ -46,22 +46,6 @@ bool Port::match(const GenericString &packet) const{//##################tried a 
         else if(!dst && key == SRC_NAME){
             input_port = key_value.stringAtIndex(1)->to_integer();
         }
-
-
-//        int value = key_value.stringAtIndex(1)->to_integer();
-////        if (key == SRC_NAME || key == DST_NAME) {
-////            input_port = value;
-////        }
-//        if (dst){
-//            if (key == DST_NAME){
-//                input_port = value;
-//            }
-//        }
-//        else{
-//            if (key == SRC_NAME){
-//                input_port = value;
-//            }
-//        }
     }
     if (input_port <= max_port && input_port >= min_port) {
         return true;

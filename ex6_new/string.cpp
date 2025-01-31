@@ -3,7 +3,6 @@
 
 //allocate memory and copy the string
 char* String::allocate_and_copy(const char *str, int size) {
-//    return strncpy(new char[size + 1], str, size+1);
     char *new_str = new char[size + 1];
     for (int i = 0; i < size+1; i++) {
         new_str[i] = str[i];
@@ -13,8 +12,6 @@ char* String::allocate_and_copy(const char *str, int size) {
 
 //constructor
 String::String(const char *str){
-//    this->str = new char[strlen(str) + 1];
-//    strcpy(this->str,str);
     this->length = strlen(str);
     this->str = allocate_and_copy(str, strlen(str));
 }
@@ -119,12 +116,12 @@ String &String::trim(){
 }
 
 //convert a GenericString to a String, no const, and return a reference
-String& String::as_string(){//################tried a different approach################
+String& String::as_string(){
     return dynamic_cast<String&>(*this);
 }
 
 //convert a GenericString to a String, const
-const String& String::as_string() const {//################tried a different approach################
+const String& String::as_string() const {
     return dynamic_cast<const String&>(*this);
 }
 
