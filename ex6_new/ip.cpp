@@ -53,19 +53,21 @@ void Ip::get_rule(GenericString &rule) {
 
         StringArray ipRule = value.split("/");
         ipRule.trimArray();
-        String ip_str = ipRule.stringAtIndex(0)->as_string();
+        const char* ip_str = ipRule.stringAtIndex(0)->as_string().get_str();
         this->mask_ip = ipRule.stringAtIndex(1)->to_integer();
 
         // Converting the IP to binary
-        StringArray octets = ip_str.split(".");
+        StringArray octets = String(ip_str).split(".");
         octets.trimArray();
         std::bitset<32> ip_bits = 0;
         for (int i = 0; i < octets.getSize(); ++i) {
-            ip_bits = (ip_bits << 8) | std::bitset<32>(octets.stringAtIndex(i)->as_string().to_integer());
+            std::bitset<32> octet_bits(octets.stringAtIndex(i)->as_string().to_integer());
+            ip_bits = (ip_bits | octet_bits) << 8;
         }
         this->ip = ip_bits.to_ulong();
     }
 }
+
 
 bool Ip::match(const GenericString &packet) const{
     StringArray fields = packet.split(",");
