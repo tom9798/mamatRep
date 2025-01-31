@@ -39,12 +39,12 @@ while IFS= read -r rule; do
     rule3=${rule3// /}
     rule4=${rule4// /}
     # process packets with all rules in one go
-    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4")
+    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | tr -d ' ')
    packets_passed+=" $out"
     unset rule1 rule2 rule3 rule4 out
 done <<< "$all_rules"
 #packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort)
-packets_passed=$(echo "$packets_passed" | tr ' ' '\n' | awk 'NF' | sort | tr -d ' ')
+packets_passed=$(echo "$packets_passed" | tr ' ' '\n' | awk 'NF' | sort | uniq)
 echo "$packets_passed"
 
 
