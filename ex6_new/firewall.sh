@@ -1,3 +1,37 @@
+#!/bin/bash
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+
+allPackets=$(cat)
+allRules=$1
+
+# Remove comments and empty lines
+allRules=$(echo "$allRules" | sed -e 's/#.*//' -e '/^$/d')
+
+# Loop over all rules
+while IFS=, read -r src_ip dst_ip src_port dst_port; do
+    # Remove spaces
+    src_ip=$(echo "$src_ip" | tr -d ' ')
+    dst_ip=$(echo "$dst_ip" | tr -d ' ')
+    src_port=$(echo "$src_port" | tr -d ' ')
+    dst_port=$(echo "$dst_port" | tr -d ' ')
+
+    # Run the packets through the firewall for each rule
+    passedPackets=$(echo "$allPackets" | ./firewall.exe "$src_ip" | \
+                    ./firewall.exe "$dst_ip" | \
+                    ./firewall.exe "$src_port" | \
+                    ./firewall.exe "$dst_port")
+
+    # Append the packets that passed to the final result
+    allPassedPackets+="$passedPackets"$'\n'
+
+done <<< "$allRules"
+
+
+
+
+
+
+
 ##!/bin/bash
 #export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 #
@@ -37,33 +71,33 @@
 
 
 
-#!/bin/bash
-
-#getting rules file and packet file
-rules_file="$1"
-packets=$(cat)
-
-# deleting all comments and lines starting with '#'
-rules=$(sed -e 's/#.*//' -e '/^$/d' "$rules_file") #echo "$rules"
-
-
-IFS=, #coma is a delimiter
-while read -r rule1 rule2 rule3 rule4 ; do
-    {
-        #funneling only matching packets to the next rule
-        funnel=$(echo "$packets" | ./firewall.exe "$(echo "$rule1")")
-        funnel=$(echo "$funnel" | ./firewall.exe "$rule2")
-        funnel=$(echo "$funnel" | ./firewall.exe "$rule3")
-        funnel=$(echo "$funnel" | ./firewall.exe "$rule4")
-        all_match_packets="$all_match_packets\n$funnel"
-
-
-    }
-done <<< "$rules"
-
-#removing all spaces and empty lines, sort, then prints the final value
-all_match_packets="${all_match_packets// /}"
-echo -e "$all_match_packets" | sed "s/ //g ; /^$/d" | sort -u
+##!/bin/bash
+#
+##getting rules file and packet file
+#rules_file="$1"
+#packets=$(cat)
+#
+## deleting all comments and lines starting with '#'
+#rules=$(sed -e 's/#.*//' -e '/^$/d' "$rules_file") #echo "$rules"
+#
+#
+#IFS=, #coma is a delimiter
+#while read -r rule1 rule2 rule3 rule4 ; do
+#    {
+#        #funneling only matching packets to the next rule
+#        funnel=$(echo "$packets" | ./firewall.exe "$(echo "$rule1")")
+#        funnel=$(echo "$funnel" | ./firewall.exe "$rule2")
+#        funnel=$(echo "$funnel" | ./firewall.exe "$rule3")
+#        funnel=$(echo "$funnel" | ./firewall.exe "$rule4")
+#        all_match_packets="$all_match_packets\n$funnel"
+#
+#
+#    }
+#done <<< "$rules"
+#
+##removing all spaces and empty lines, sort, then prints the final value
+#all_match_packets="${all_match_packets// /}"
+#echo -e "$all_match_packets" | sed "s/ //g ; /^$/d" | sort -u
 
 
 
