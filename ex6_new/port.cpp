@@ -17,7 +17,7 @@ void Port::get_rule(GenericString &rule){
     ruleArr.trimArray();
     int min_value;
     int max_value;
-    if (ruleArr.stringAtIndex(0)->as_string() == SRC_NAME || ruleArr.stringAtIndex(0)->as_string() == DST_NAME) { //##################tried a different approach##################
+    if (ruleArr.stringAtIndex(0)->as_string() == SRC_NAME || ruleArr.stringAtIndex(0)->as_string() == DST_NAME) {
         if (ruleArr.stringAtIndex(0)->as_string() == DST_NAME) {
             this->dst = true;
         }
@@ -30,7 +30,7 @@ void Port::get_rule(GenericString &rule){
     }
 }
 
-bool Port::match(const GenericString &packet) const{//##################tried a different approach##################
+bool Port::match(const GenericString &packet) const{
     StringArray fields = packet.split(",");
     fields.trimArray();
 
