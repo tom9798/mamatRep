@@ -46,9 +46,13 @@ while IFS= read -r rule; do
 
     # Process packets with each rule separately
     packets=$(echo "$packets" | ./firewall.exe "$src_ip" | ./firewall.exe "$dst_ip" | ./firewall.exe "$src_port" | ./firewall.exe "$dst_port")
-
+    packets_passed+=" $packets"
 done <<< "$all_rules"
 
 # Remove leading/trailing spaces, empty lines, and sort/uniq the packets
-packets_passed=$(echo "$packets" | tr ' ' '\n' | awk 'NF' | sort | uniq)
+#packets_passed=$(echo "$packets" | tr ' ' '\n' | awk 'NF' | sort | uniq)
+
+#    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
+output=$(echo "$packets_passed" | sort | tr -d ' ' | tr ' ' '\n' | awk 'NF')
+
 echo "$packets_passed"
