@@ -17,7 +17,8 @@ while IFS= read -r rule; do
   # process packets with all rules in one go
   out=$(echo "$packets" | ./firewall.exe "$src_ip" | ./firewall.exe "$dst_ip" | ./firewall.exe "$src_port" | ./firewall.exe "$dst_port" | tr -d ' ' | sort)
   packets_passed+=" $out"
-    unset rule1 rule2 rule3 rule4 out
+#    unset rule1 rule2 rule3 rule4 out
+  unset src_ip dst_ip src_port dst_port out
 done <<< "$all_rules"
 packets_passed=$(echo "$packets_passed" | tr ' ' '\n' | awk 'NF' | sort)
 echo "$packets_passed"
