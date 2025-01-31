@@ -14,7 +14,7 @@ while IFS= read -r rule; do
     rule2=${rule2// /}
     rule3=${rule3// /}
     rule4=${rule4// /}
-    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
+    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | tr -d ' ')
     packets_passed+=" $out"
     unset rule1 rule2 rule3 rule4 out
 done <<< "$all_rules"
