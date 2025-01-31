@@ -10,32 +10,23 @@ allRules=$(echo "$allRules" | sed -e 's/#.*//' -e '/^$/d')
 
 # Loop over all rules
 while IFS=, read -r src_ip dst_ip src_port dst_port; do
-    # Remove spaces
-    src_ip=$(echo "$src_ip" | tr -d ' ')
-#    echo "$src_ip"
-    dst_ip=$(echo "$dst_ip" | tr -d ' ')
-#    echo "$dst_ip"
-    src_port=$(echo "$src_port" | tr -d ' ')
-#    echo "$src_port"
-    dst_port=$(echo "$dst_port" | tr -d ' ')
-#    echo "$dst_port"
-
+#    src_ip=$(echo "$src_ip" | tr -d ' ')
+#    dst_ip=$(echo "$dst_ip" | tr -d ' ')
+#    src_port=$(echo "$src_port" | tr -d ' ')
+#    dst_port=$(echo "$dst_port" | tr -d ' ')
     # Run the packets through the firewall for each rule
     passedPackets=$(echo "$allPackets" | ./firewall.exe "$src_ip" | \
                     ./firewall.exe "$dst_ip" | \
                     ./firewall.exe "$src_port" | \
                     ./firewall.exe "$dst_port")
-#    echo "$passedPackets"
-    # Append the packets that passed to the final result
     allPassedPackets+="$passedPackets"$'\n'
 
 #remove spaces and empty lines and sort the packets
-allPassedPackets=$(echo "$allPassedPackets" | tr -d ' ' | sed '/^$/d' | sort -u)
+#allPassedPackets=$(echo "$allPassedPackets" | tr -d ' ' | sed '/^$/d' | sort -u)
+allPassedPackets$="${allPassedPackets// /}"
+allPassedPackets=$(echo -e "$allPassedPackets" | sed "s/ //g ; /^$/d" | sort -u)
 echo "$allPassedPackets"
-
 done <<< "$allRules"
-
-#done <<< "$allRules"
 
 
 
