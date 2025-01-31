@@ -22,7 +22,7 @@ void Port::get_rule(GenericString &rule){
             this->dst = true;
         }
         StringArray rangeValues = ruleArr.stringAtIndex(1)->as_string().split("-");
-        rangeValues.trimArray();
+//        rangeValues.trimArray();
         min_value = rangeValues.stringAtIndex(0)->to_integer();
         max_value = rangeValues.stringAtIndex(1)->to_integer();
         this->min_port = min_value;
