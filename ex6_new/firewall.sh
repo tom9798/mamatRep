@@ -44,7 +44,7 @@ while IFS= read -r rule; do
     unset rule1 rule2 rule3 rule4 out
 done <<< "$all_rules"
 #packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort)
-packets_passed=$(echo "$packets_passed" | tr ' ' '\n' | awk 'NF' | sort | uniq)
+packets_passed=$(echo "$packets_passed" | tr ' ' '\n' | awk 'NF' | sort)
 echo "$packets_passed"
 
 
