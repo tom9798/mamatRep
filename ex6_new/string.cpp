@@ -85,17 +85,16 @@ StringArray String::split(const char *delimiters) const {
 
         // Add the token to the array
         if (end > start) {
-            array.insert(String(start, end - start));
+//            array.insert(String(start, end - start));
+            array.insert(allocate_and_copy(start, end - start));
         }
 
         // Skip the delimiter
         if (*end != '\0') {
             ++end;
         }
-
         start = end;
     }
-
     return array;
 }
 
