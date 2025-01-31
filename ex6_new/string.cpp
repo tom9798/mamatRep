@@ -56,19 +56,46 @@ bool String::operator==(const GenericString &other) const{
 }
 
 //split the string by the delimiters
-StringArray String::split(const char *delimiters) const{
-    char *cpy = allocate_and_copy(this->str, this->length); //we don't want to change the original string
+//StringArray String::split(const char *delimiters) const{
+//    char *cpy = allocate_and_copy(this->str, this->length); //we don't want to change the original string
+//
+//    char *token = strtok(cpy,delimiters); // first token
+//
+//    StringArray array;
+//
+//    while(token != NULL) // insert each token to the array
+//    {
+//        array.insert(token);
+//        token = strtok(NULL,delimiters);
+//    }
+//    delete[] cpy;
+//    return array;
+//}
 
-    char *token = strtok(cpy,delimiters); // first token
-
+StringArray String::split(const char *delimiters) const {
     StringArray array;
+    const char *start = this->str;
+    const char *end = start;
 
-    while(token != NULL) // insert each token to the array
-    {
-        array.insert(token);
-        token = strtok(NULL,delimiters);
+    while (*end != '\0') {
+        // Find the next delimiter
+        while (*end != '\0' && strchr(delimiters, *end) == nullptr) {
+            ++end;
+        }
+
+        // Add the token to the array
+        if (end > start) {
+            array.insert(String(start, end - start));
+        }
+
+        // Skip the delimiter
+        if (*end != '\0') {
+            ++end;
+        }
+
+        start = end;
     }
-    delete[] cpy;
+
     return array;
 }
 
