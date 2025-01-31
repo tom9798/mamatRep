@@ -18,10 +18,11 @@ while IFS= read -r rule; do
     rule3=$(echo "$iter_rule" | cut -d',' -f3 | tr -d ' ')
     rule4=$(echo "$iter_rule" | cut -d',' -f4 | tr -d ' ')
 	# insert packets file to run with each rule part while passing the output to the next rule
-   	out=$(echo "$packets" | ./firewall.exe "$rule1" | sort | tr -d ' ')
-   	out=$(echo "$out" | ./firewall.exe "$rule2" | sort | tr -d ' ')
-   	out=$(echo "$out" | ./firewall.exe "$rule3" | sort | tr -d ' ')
-   	out=$(echo "$out" | ./firewall.exe "$rule4" | sort | tr -d ' ')
+#   	out=$(echo "$packets" | ./firewall.exe "$rule1" | sort | tr -d ' ')
+#   	out=$(echo "$out" | ./firewall.exe "$rule2" | sort | tr -d ' ')
+#   	out=$(echo "$out" | ./firewall.exe "$rule3" | sort | tr -d ' ')
+#   	out=$(echo "$out" | ./firewall.exe "$rule4" | sort | tr -d ' ')
+    out=$(echo "$packets" | ./firewall.exe "$rule1" | ./firewall.exe "$rule2" | ./firewall.exe "$rule3" | ./firewall.exe "$rule4" | sort | tr -d ' ')
 
 #   	tmp_passed=$(echo "$out" | sort | uniq -c | grep -E "^\s*4\s+" | awk '{print $2}')
    	packets_passed+=" $out"
@@ -33,20 +34,6 @@ done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
 
 packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
 echo "$packets_passed"
-
-#	# packets that passed all 4
-#    tmp_passed=$(echo -e "$rule1_passed\n$rule2_passed\n$rule3_passed\n$rule4_passed" | sort | uniq -c | grep -E "^\s*4\s+" | awk '{print $2}')
-#    packets_passed+=" $tmp_passed"
-#    # clean up
-#    unset rule1 rule2 rule3 rule4 rule1_passed rule2_passed rule3_passed rule4_passed tmp_passed
-#
-#done < <(echo "$all_rules" | awk '{sub(/#.*/, "", $0); print}' | awk 'NF')
-#
-#packets_passed=$(echo "$packets_passed"| tr ' ' '\n' | awk 'NF' | sort | uniq)
-#echo "$packets_passed"
-
-
-
 
 
 
